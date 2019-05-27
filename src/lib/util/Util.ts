@@ -4,17 +4,35 @@ export interface AnyObj {
     [K: string]: any;
 }
 
+/**
+ * Internal utility class
+ */
 export class Util {
     public static PRIMITIVE_TYPES: string[] = ['string', 'number', 'bigint', 'boolean'];
 
+    /**
+     * Checks if a value is an [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object).
+     * @param {*} inp Input to check
+     * @returns {boolean}
+     */
     public static isObject(inp: any): boolean {
         return inp && inp.constructor === Object;
     }
 
+    /**
+     * Checks if a value is a [primitive](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) type.
+     * @param {*} inp Input to check
+     * @returns {boolean}
+     */
     public static isPrimitive(inp: any): inp is string | boolean | bigint | number {
         return this.PRIMITIVE_TYPES.includes(typeof inp);
     }
 
+    /**
+     * Deeply clones a value.
+     * @param {*} source Value to clone
+     * @returns {*}
+     */
     public static deepClone(source: any): any {
         if (source === null || this.isPrimitive(source)) return source;
         if (Array.isArray(source)) {
@@ -40,6 +58,12 @@ export class Util {
         return source;
     }
 
+    /**
+     * Merges a given object with a set of defaults.
+     * @param {Object} def Defaults to add
+     * @param {Object} given Given object to add to
+     * @returns {Object}
+     */
     public static mergeDefault<T>(def: AnyObj, given: AnyObj): T {
         if (!given) return this.deepClone(def);
         for (const key in def) {

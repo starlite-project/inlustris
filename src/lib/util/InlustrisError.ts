@@ -4,6 +4,10 @@ const Messages = {
     FAILED_TO_LOAD: (plugin: string, e: any): string => `The plugin ${plugin} failed to load\n${e}`
 };
 
+/**
+ * An error class used to make error throwing universal.
+ * @extends {Error}
+ */
 export class InlustrisError extends Error {
     private code: string;
     public constructor(key: string, ...args: string[]) {
