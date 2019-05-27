@@ -1,4 +1,4 @@
-import { Client, ClientOptions } from 'discord.js';
+import { Client, ClientOptions, ClientApplication, User } from 'discord.js';
 import { InlustrisOptions } from './interfaces/InlustrisOptions';
 import { InlustrisPlugin } from './interfaces/InlustrisPlugin';
 import { ClientUtil } from './util/ClientUtil';
@@ -6,6 +6,7 @@ import { InlustrisError } from './util/InlustrisError';
 import { List } from './util/List';
 import { Util } from './util/Util';
 import { DefaultOptions } from './util/Constants';
+import { dirname } from 'path';
 
 
 /**
@@ -18,6 +19,8 @@ export class InlustrisClient extends Client {
     public util: ClientUtil | null;
     private _token: string;
     [K: string]: any;
+    public application: ClientApplication | null;
+    public userBaseDirectory: string;
     /**
      * Creates a new client.
      * @param {InlustrisOptions} [options={}] Options to use when loading the client.
@@ -25,6 +28,12 @@ export class InlustrisClient extends Client {
     public constructor(options: InlustrisOptions = {}) {
         options = Util.mergeDefault<InlustrisOptions>(DefaultOptions, options);
         super(options);
+
+        /**
+         * The directory where the user's base files are
+         * @type {string}
+         */
+        this.userBaseDirectory = dirname(require.main!.filename);
 
         /**
          * The plugins to load, kept as a list internally
@@ -45,6 +54,35 @@ export class InlustrisClient extends Client {
          * @private 
          */
         this._token = options.token!;
+
+        /**
+         * The application of the client
+         * @type {?external:ClientApplication}
+         */
+        this.application = null;
+    }
+
+    /**
+     * The owners of the client, will only have one until teams support is added
+     * @readonly
+     * @type {List<external:User>}
+     */
+    public get owners(): List<User> {
+        const owners = new List<User>();
+        for (const owner of this.options.owners!) {
+            const user = this.users.get(owner);
+            if (user) owners.add(user);
+        }
+        return owners;
+    }
+    
+    /**
+     * Does the same as [Client#fetchApplication()](https://discord.js.org/#/docs/main/master/class/Client?scrollTo=fetchApplication) but attaches the resolved value to {@link InlustrisClient#application}
+     * @returns {Promise<external:ClientApplication>}
+     */
+    public async fetchApplication(): Promise<ClientApplication> {
+        this.application = await super.fetchApplication();
+        return this.application;
     }
 
     /**
@@ -126,6 +164,11 @@ export class InlustrisClient extends Client {
 /**
  * @external ClientOptions
  * @see {@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions}
+ */
+
+/**
+ * @external ClientApplication
+ * @see {@link https://discord.js.org/#/docs/main/master/class/ClientApplication}
  */
 
 /**

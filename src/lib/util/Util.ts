@@ -5,9 +5,17 @@ export interface AnyObj {
 }
 
 /**
- * Internal utility class
+ * Internal utility class.
  */
 export class Util {
+    /**
+     * This class may not be initialized with new
+     * @throws {Error}
+     */
+    private constructor() {
+        throw new Error('This class may not be initiated with new');
+    }
+
     public static PRIMITIVE_TYPES: string[] = ['string', 'number', 'bigint', 'boolean'];
 
     /**
@@ -72,5 +80,16 @@ export class Util {
         }
 
         return given as any;
+    }
+
+    /**
+     * Checks if a given input is a class.
+     * @param {Function} inp The input to check
+     * @returns {boolean}
+     */
+    public static isClass(inp: any): boolean {
+        return typeof inp === 'function' &&
+            typeof inp.prototype === 'object' &&
+            inp.toString().substring(0, 5) === 'class';
     }
 }

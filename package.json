@@ -14,7 +14,8 @@
         "docs": "jsdoc2md --no-cache --files ./src/**/*.ts --configure ./jsdoc2md.json > docs.md"
     },
     "dependencies": {
-        "discord.js": "discordjs/discord.js"
+        "discord.js": "discordjs/discord.js",
+        "fs-nextra": "^0.4.5"
     },
     "devDependencies": {
         "@babel/cli": "^7.4.4",

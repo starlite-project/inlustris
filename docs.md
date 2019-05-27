@@ -3,6 +3,8 @@
 <dl>
 <dt><a href="#InlustrisClient">InlustrisClient</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Client">Client</a></code></dt>
 <dd><p>The base client for Inlustris.</p></dd>
+<dt><a href="#Store">Store</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Collection">Collection</a></code></dt>
+<dd><p>The common base for all stores.</p></dd>
 <dt><a href="#ClientUtil">ClientUtil</a></dt>
 <dd><p>Utility methods to use for common tasks.</p></dd>
 <dt><a href="#InlustrisError">InlustrisError</a> ⇐ <code>Error</code></dt>
@@ -10,7 +12,7 @@
 <dt><a href="#List">List</a> ⇐ <code>Set</code></dt>
 <dd><p>A Set with additional utility methods.</p></dd>
 <dt><a href="#Util">Util</a></dt>
-<dd><p>Internal utility class</p></dd>
+<dd><p>Internal utility class.</p></dd>
 </dl>
 
 ## Typedefs
@@ -33,6 +35,9 @@
 * [InlustrisClient](#InlustrisClient) ⇐ [<code>Client</code>](https://discord.js.org/#/docs/main/master/class/Client)
     * [new InlustrisClient([options])](#new_InlustrisClient_new)
     * [.util](#InlustrisClient+util) : [<code>ClientUtil</code>](#ClientUtil) \| <code>null</code>
+    * [.application](#InlustrisClient+application) : [<code>ClientApplication</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
+    * [.owners](#InlustrisClient+owners) : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
+    * [.fetchApplication()](#InlustrisClient+fetchApplication) ⇒ [<code>Promise.&lt;ClientApplication&gt;</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * ~~[.login()](#InlustrisClient+login)~~
     * [.start()](#InlustrisClient+start) ⇒ <code>Promise.&lt;string&gt;</code>
     * [.use(mod)](#InlustrisClient+use) ⇒ [<code>InlustrisClient</code>](#InlustrisClient)
@@ -53,6 +58,25 @@
 <p>A [ClientUtil](#ClientUtil) to use, will only be loaded if <code>internals</code>, <code>defaults</code>, or <code>util</code> is specified in [InlustrisOptions#plugins](InlustrisOptions#plugins) or used with [use](#InlustrisClient+use)</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+<a name="InlustrisClient+application"></a>
+
+### inlustrisClient.application : [<code>ClientApplication</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
+<p>The application of the client</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+<a name="InlustrisClient+owners"></a>
+
+### inlustrisClient.owners : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
+<p>The owners of the client, will only have one until teams support is added</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
+<a name="InlustrisClient+fetchApplication"></a>
+
+### inlustrisClient.fetchApplication() ⇒ [<code>Promise.&lt;ClientApplication&gt;</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
+<p>Does the same as <a href="https://discord.js.org/#/docs/main/master/class/Client?scrollTo=fetchApplication">Client#fetchApplication()</a> but attaches the resolved value to [application](#InlustrisClient+application)</p>
+
+**Kind**: instance method of [<code>InlustrisClient</code>](#InlustrisClient)  
 <a name="InlustrisClient+login"></a>
 
 ### ~~inlustrisClient.login()~~
@@ -82,6 +106,20 @@
 | --- | --- | --- |
 | mod | <code>string</code> | <p>The name of a plugin to load, will be required if it's external</p> |
 
+<a name="Store"></a>
+
+## Store ⇐ [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)
+<p>The common base for all stores.</p>
+
+**Kind**: global class  
+**Extends**: [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)  
+<a name="Store+client"></a>
+
+### store.client : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client that initialized this store</p>
+
+**Kind**: instance property of [<code>Store</code>](#Store)  
+**Read only**: true  
 <a name="ClientUtil"></a>
 
 ## ClientUtil
@@ -780,15 +818,26 @@ The sort is not necessarily stable. The default sort order is according to strin
 <a name="Util"></a>
 
 ## Util
-<p>Internal utility class</p>
+<p>Internal utility class.</p>
 
 **Kind**: global class  
 
 * [Util](#Util)
+    * [new Util()](#new_Util_new)
     * [.isObject(inp)](#Util.isObject) ⇒ <code>boolean</code>
     * [.isPrimitive(inp)](#Util.isPrimitive) ⇒ <code>boolean</code>
     * [.deepClone(source)](#Util.deepClone) ⇒ <code>\*</code>
     * [.mergeDefault(def, given)](#Util.mergeDefault) ⇒ <code>Object</code>
+    * [.isClass(inp)](#Util.isClass) ⇒ <code>boolean</code>
+
+<a name="new_Util_new"></a>
+
+### new Util()
+<p>This class may not be initialized with new</p>
+
+**Throws**:
+
+- <code>Error</code> 
 
 <a name="Util.isObject"></a>
 
@@ -834,6 +883,17 @@ The sort is not necessarily stable. The default sort order is according to strin
 | --- | --- | --- |
 | def | <code>Object</code> | <p>Defaults to add</p> |
 | given | <code>Object</code> | <p>Given object to add to</p> |
+
+<a name="Util.isClass"></a>
+
+### Util.isClass(inp) ⇒ <code>boolean</code>
+<p>Checks if a given input is a class.</p>
+
+**Kind**: static method of [<code>Util</code>](#Util)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inp | <code>function</code> | <p>The input to check</p> |
 
 <a name="InlustrisPlugin"></a>
 
