@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "target": "esnext",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "strictNullChecks": true,
+        "declaration": true,
+        "incremental": true,
+        "types": [
+            "node",
+            "discord.js"
+        ],
+        "noEmitOnError": true,
+        "tsBuildInfoFile": "./.cache/tsbuildinfo.json",
+        "listEmittedFiles": true
+    }
+}
