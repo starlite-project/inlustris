@@ -5,19 +5,30 @@
     "license": "MIT",
     "scripts": {
         "build": "tsc",
-        "prebuild": "npm run lint:fix",
+        "prebuild": "npm run prebuild:lint && npm run prebuild:docs",
         "lint:fix": "npx eslint src --ext .ts --fix",
         "lint": "npx eslint src --ext .ts",
-        "clean": "rimraf dist/ .cache/"
+        "clean": "rimraf dist/ .cache/",
+        "prebuild:lint": "npm run lint:fix",
+        "prebuild:docs": "npm run docs",
+        "docs": "jsdoc2md --no-cache --files ./src/**/*.ts --configure ./jsdoc2md.json > docs.md"
     },
     "dependencies": {
         "discord.js": "discordjs/discord.js"
     },
     "devDependencies": {
+        "@babel/cli": "^7.4.4",
+        "@babel/core": "^7.4.5",
+        "@babel/plugin-proposal-class-properties": "^7.4.4",
+        "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+        "@babel/preset-env": "^7.4.5",
+        "@babel/preset-typescript": "^7.3.3",
         "@types/node": "^12.0.2",
         "@typescript-eslint/eslint-plugin": "^1.9.0",
         "@typescript-eslint/parser": "^1.9.0",
         "eslint": "^5.16.0",
+        "jsdoc-babel": "^0.5.0",
+        "jsdoc-to-markdown": "^5.0.0",
         "rimraf": "^2.6.3",
         "typescript": "^3.4.5"
     },

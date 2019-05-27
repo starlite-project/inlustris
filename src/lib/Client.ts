@@ -7,6 +7,11 @@ import { List } from './util/List';
 import { Util } from './util/Util';
 import { DefaultOptions } from './util/Constants';
 
+
+/**
+ * The base client for Inlustris.
+ * @extends {external:Client}
+ */
 export class InlustrisClient extends Client {
     public options: InlustrisOptions;
     private _plugins: List<string>;
@@ -62,3 +67,9 @@ export class InlustrisClient extends Client {
         }
     }
 }
+
+
+/**
+ * @external Client
+ * @see {@link https://discord.js.org/#/docs/main/master/class/Client}
+ */
