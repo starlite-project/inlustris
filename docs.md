@@ -40,6 +40,7 @@
     * ~~[.login()](#InlustrisClient+login)~~
     * [.start()](#InlustrisClient+start) ⇒ <code>Promise.&lt;string&gt;</code>
     * [.use(mod)](#InlustrisClient+use) ⇒ [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.isOwner(user)](#InlustrisClient+isOwner) ⇒ <code>boolean</code>
 
 <a name="new_InlustrisClient_new"></a>
 
@@ -111,6 +112,17 @@
 | Param | Type | Description |
 | --- | --- | --- |
 | mod | <code>string</code> | <p>The name of a plugin to load, will be required if it's external</p> |
+
+<a name="InlustrisClient+isOwner"></a>
+
+### inlustrisClient.isOwner(user) ⇒ <code>boolean</code>
+<p>Checks if the given user is an owner of the bot.</p>
+
+**Kind**: instance method of [<code>InlustrisClient</code>](#InlustrisClient)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| user | [<code>UserResolvable</code>](https://discord.js.org/#/docs/main/master/typedef/UserResolvable) | <p>The user to check</p> |
 
 <a name="ClientUtil"></a>
 

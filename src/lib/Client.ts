@@ -1,4 +1,4 @@
-import { Client, ClientOptions, ClientApplication, User } from 'discord.js';
+import { Client, ClientOptions, ClientApplication, User, UserResolvable } from 'discord.js';
 import { InlustrisOptions } from './interfaces/InlustrisOptions';
 import { InlustrisPlugin } from './interfaces/InlustrisPlugin';
 import { ClientUtil } from './util/ClientUtil';
@@ -84,7 +84,7 @@ export class InlustrisClient extends Client {
     public get plugins(): List<string> {
         return this._plugins;
     }
-    
+
     /**
      * Does the same as [Client#fetchApplication()](https://discord.js.org/#/docs/main/master/class/Client?scrollTo=fetchApplication) but attaches the resolved value to {@link InlustrisClient#application}
      * @returns {Promise<external:ClientApplication>}
@@ -162,8 +162,27 @@ export class InlustrisClient extends Client {
             throw new InlustrisError('FAILED_TO_LOAD', plugin.name, e);
         }
     }
+
+    /**
+     * Checks if the given user is an owner of the bot.
+     * @param {external:UserResolvable} user The user to check
+     * @returns {boolean}
+     */
+    public isOwner(user: UserResolvable): boolean {
+        const { owners } = this;
+        const id = this.users.resolveID(user);
+        if (!id) return false;
+        for (const owner of owners) {
+            if (owner.id === id) return true;
+        }
+        return false;
+    }
 }
 
+/**
+ * @external UserResolvable
+ * @see {@link https://discord.js.org/#/docs/main/master/typedef/UserResolvable}
+ */
 
 /**
  * @external Client
