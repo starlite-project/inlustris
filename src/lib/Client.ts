@@ -111,7 +111,7 @@ export class InlustrisClient extends Client {
         for (const plugin of this._plugins) {
             const resolved = this._resolvePlugin(plugin);
             if (typeof resolved === 'string') continue;
-            this._loadPlugin(resolved);
+            await this._loadPlugin(resolved);
         }
         return super.login(this._token);
     }
@@ -155,9 +155,9 @@ export class InlustrisClient extends Client {
      * @returns {void}
      * @private
      */
-    private _loadPlugin(plugin: InlustrisPlugin): void {
+    private async _loadPlugin(plugin: InlustrisPlugin): Promise<void> {
         try {
-            this[plugin.name] = plugin.loader.call(this);
+            this[plugin.name] = await plugin.loader.call(this);
         } catch (e) {
             throw new InlustrisError('FAILED_TO_LOAD', plugin.name, e);
         }
