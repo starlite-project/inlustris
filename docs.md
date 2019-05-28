@@ -3,6 +3,12 @@
 <dl>
 <dt><a href="#InlustrisClient">InlustrisClient</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Client">Client</a></code></dt>
 <dd><p>The base client for Inlustris.</p></dd>
+<dt><a href="#BaseDispatcher">BaseDispatcher</a></dt>
+<dd><p>The base dispatcher to handle the dispatching of bases.</p></dd>
+<dt><a href="#BaseRegistry">BaseRegistry</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Collection">Collection</a></code></dt>
+<dd><p>The base registry for all stores to extend.</p></dd>
+<dt><a href="#Base">Base</a></dt>
+<dd><p>The base class for all pieces.</p></dd>
 <dt><a href="#ClientUtil">ClientUtil</a></dt>
 <dd><p>Utility methods to use for common tasks.</p></dd>
 <dt><a href="#InlustrisError">InlustrisError</a> ⇐ <code>Error</code></dt>
@@ -20,6 +26,8 @@
 <dd><p>The required export to load an external plugin</p></dd>
 <dt><a href="#InlustrisOptions">InlustrisOptions</a> : <code><a href="https://discord.js.org/#/docs/main/master/typedef/ClientOptions">ClientOptions</a></code></dt>
 <dd><p>Options for a new [InlustrisClient](#InlustrisClient)</p></dd>
+<dt><a href="#BaseOptions">BaseOptions</a> : <code>Object</code></dt>
+<dd><p>The base options for a module</p></dd>
 </dl>
 
 <a name="InlustrisClient"></a>
@@ -41,6 +49,8 @@
     * [.start()](#InlustrisClient+start) ⇒ <code>Promise.&lt;string&gt;</code>
     * [.use(mod)](#InlustrisClient+use) ⇒ [<code>InlustrisClient</code>](#InlustrisClient)
     * [.isOwner(user)](#InlustrisClient+isOwner) ⇒ <code>boolean</code>
+    * ["baseEnabled" (base)](#InlustrisClient+event_baseEnabled)
+    * ["baseDisabled" (base)](#InlustrisClient+event_baseDisabled)
 
 <a name="new_InlustrisClient_new"></a>
 
@@ -124,6 +134,172 @@
 | --- | --- | --- |
 | user | [<code>UserResolvable</code>](https://discord.js.org/#/docs/main/master/typedef/UserResolvable) | <p>The user to check</p> |
 
+<a name="InlustrisClient+event_baseEnabled"></a>
+
+### "baseEnabled" (base)
+<p>Emitted when a base is enabled.</p>
+
+**Kind**: event emitted by [<code>InlustrisClient</code>](#InlustrisClient)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| base | [<code>Base</code>](#Base) | <p>The base that was enabled</p> |
+
+<a name="InlustrisClient+event_baseDisabled"></a>
+
+### "baseDisabled" (base)
+<p>Emitted when a base is disabled.</p>
+
+**Kind**: event emitted by [<code>InlustrisClient</code>](#InlustrisClient)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| base | [<code>Base</code>](#Base) | <p>The base that was disabled</p> |
+
+<a name="BaseDispatcher"></a>
+
+## *BaseDispatcher*
+<p>The base dispatcher to handle the dispatching of bases.</p>
+
+**Kind**: global abstract class  
+
+* *[BaseDispatcher](#BaseDispatcher)*
+    * *[.client](#BaseDispatcher+client) : [<code>InlustrisClient</code>](#InlustrisClient)*
+    * *[.registry](#BaseDispatcher+registry) : [<code>BaseRegistry</code>](#BaseRegistry)*
+
+<a name="BaseDispatcher+client"></a>
+
+### *baseDispatcher.client : [<code>InlustrisClient</code>](#InlustrisClient)*
+<p>The client this Dispatcher is for</p>
+
+**Kind**: instance property of [<code>BaseDispatcher</code>](#BaseDispatcher)  
+**Read only**: true  
+<a name="BaseDispatcher+registry"></a>
+
+### *baseDispatcher.registry : [<code>BaseRegistry</code>](#BaseRegistry)*
+<p>The registry this dispatcher is for</p>
+
+**Kind**: instance property of [<code>BaseDispatcher</code>](#BaseDispatcher)  
+**Read only**: true  
+<a name="BaseRegistry"></a>
+
+## *BaseRegistry ⇐ [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)*
+<p>The base registry for all stores to extend.</p>
+
+**Kind**: global abstract class  
+**Extends**: [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)  
+
+* *[BaseRegistry](#BaseRegistry) ⇐ [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)*
+    * *[.holds](#BaseRegistry+holds) : [<code>InlustrisClient</code>](#InlustrisClient)*
+    * *[.name](#BaseRegistry+name) : <code>string</code>*
+    * *[.holds](#BaseRegistry+holds) : [<code>Base</code>](#Base)*
+    * *[.userDirectory](#BaseRegistry+userDirectory) : <code>string</code>*
+
+<a name="BaseRegistry+holds"></a>
+
+### *baseRegistry.holds : [<code>InlustrisClient</code>](#InlustrisClient)*
+<p>The client that this Registry is for</p>
+
+**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
+**Read only**: true  
+<a name="BaseRegistry+name"></a>
+
+### *baseRegistry.name : <code>string</code>*
+<p>The name of the Registry</p>
+
+**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
+**Read only**: true  
+<a name="BaseRegistry+holds"></a>
+
+### *baseRegistry.holds : [<code>Base</code>](#Base)*
+<p>What this Registry holds</p>
+
+**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
+**Read only**: true  
+<a name="BaseRegistry+userDirectory"></a>
+
+### *baseRegistry.userDirectory : <code>string</code>*
+<p>The directory where the bases are found</p>
+
+**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
+<a name="Base"></a>
+
+## *Base*
+<p>The base class for all pieces.</p>
+
+**Kind**: global abstract class  
+
+* *[Base](#Base)*
+    * *[new Base(client, [options])](#new_Base_new)*
+    * *[.client](#Base+client) : [<code>InlustrisClient</code>](#InlustrisClient)*
+    * *[.options](#Base+options) : [<code>BaseOptions</code>](#BaseOptions)*
+    * *[.store](#Base+store) : <code>BaseStore</code>*
+    * *[.id](#Base+id) : <code>string</code>*
+    * *[.enabled](#Base+enabled) : <code>boolean</code>*
+    * *[.enable()](#Base+enable) ⇒ [<code>Base</code>](#Base)*
+    * *[.disable()](#Base+disable) ⇒ [<code>Base</code>](#Base)*
+
+<a name="new_Base_new"></a>
+
+### *new Base(client, [options])*
+<p>Initializes a new Base.</p>
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| client | [<code>InlustrisClient</code>](#InlustrisClient) |  | <p>The Client for the Base</p> |
+| [options] | [<code>BaseOptions</code>](#BaseOptions) | <code>{id:&#x27;&#x27;}</code> | <p>The base options</p> |
+
+<a name="Base+client"></a>
+
+### *base.client : [<code>InlustrisClient</code>](#InlustrisClient)*
+<p>The client that initialized this base</p>
+
+**Kind**: instance property of [<code>Base</code>](#Base)  
+**Read only**: true  
+<a name="Base+options"></a>
+
+### *base.options : [<code>BaseOptions</code>](#BaseOptions)*
+<p>The options for this base</p>
+
+**Kind**: instance property of [<code>Base</code>](#Base)  
+**Read only**: true  
+<a name="Base+store"></a>
+
+### *base.store : <code>BaseStore</code>*
+<p>The store that holds this base</p>
+
+**Kind**: instance property of [<code>Base</code>](#Base)  
+**Read only**: true  
+<a name="Base+id"></a>
+
+### *base.id : <code>string</code>*
+<p>The ID of this base</p>
+
+**Kind**: instance property of [<code>Base</code>](#Base)  
+**Read only**: true  
+<a name="Base+enabled"></a>
+
+### *base.enabled : <code>boolean</code>*
+<p>Whether this base is enabled</p>
+
+**Kind**: instance property of [<code>Base</code>](#Base)  
+<a name="Base+enable"></a>
+
+### *base.enable() ⇒ [<code>Base</code>](#Base)*
+<p>Enables the base. Shortcut for <code>&lt;base&gt;.enabled = true</code>.</p>
+
+**Kind**: instance method of [<code>Base</code>](#Base)  
+**Chainable**  
+**Emits**: [<code>baseEnabled</code>](#InlustrisClient+event_baseEnabled)  
+<a name="Base+disable"></a>
+
+### *base.disable() ⇒ [<code>Base</code>](#Base)*
+<p>Disables the base. Shortcut for <code>&lt;base&gt;.enabled = false</code>.</p>
+
+**Kind**: instance method of [<code>Base</code>](#Base)  
+**Chainable**  
+**Emits**: [<code>baseDisabled</code>](#InlustrisClient+event_baseDisabled)  
 <a name="ClientUtil"></a>
 
 ## ClientUtil
@@ -925,4 +1101,17 @@ The sort is not necessarily stable. The default sort order is according to strin
 | [prefix] | <code>string</code> | <p>The prefix to use for commands, can be omitted if the command plugin is disabled</p> |
 | token | <code>string</code> | <p>The token to use to log the client in</p> |
 | [plugins] | <code>Iterable.&lt;string&gt;</code> | <p>Plugins to load on start, this is the alternate to [use](#InlustrisClient+use)</p> |
+
+<a name="BaseOptions"></a>
+
+## BaseOptions : <code>Object</code>
+<p>The base options for a module</p>
+
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | <p>The ID of the module</p> |
+| enabled | <code>boolean</code> | <p>Whether the module should be enabled on startup</p> |
 

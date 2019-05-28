@@ -213,3 +213,15 @@ export class InlustrisClient extends Client {
  * @property {string} token The token to use to log the client in
  * @property {Iterable<string>} [plugins] Plugins to load on start, this is the alternate to {@link InlustrisClient#use}
  */
+
+/**
+ * Emitted when a base is enabled.
+ * @event InlustrisClient#baseEnabled
+ * @param {Base} base The base that was enabled
+ */
+
+/**
+ * Emitted when a base is disabled.
+ * @event InlustrisClient#baseDisabled
+ * @param {Base} base The base that was disabled
+ */
