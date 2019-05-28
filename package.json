@@ -5,12 +5,11 @@
     "license": "MIT",
     "scripts": {
         "build": "tsc",
-        "prebuild": "npm run prebuild:lint && npm run prebuild:docs",
+        "postbuild": "npm run docs",
+        "prebuild": "npm run lint:fix",
         "lint:fix": "npx eslint src --ext .ts --fix",
         "lint": "npx eslint src --ext .ts",
         "clean": "rimraf dist/ .cache/",
-        "prebuild:lint": "npm run lint:fix",
-        "prebuild:docs": "npm run docs",
         "docs": "jsdoc2md --no-cache --files ./src/**/*.ts --configure ./jsdoc2md.json > docs.md"
     },
     "dependencies": {

@@ -75,6 +75,15 @@ export class InlustrisClient extends Client {
         }
         return owners;
     }
+
+    /**
+     * The plugins that will be loaded when the client starts
+     * @readonly
+     * @type {List<string>}
+     */
+    public get plugins(): List<string> {
+        return this._plugins;
+    }
     
     /**
      * Does the same as [Client#fetchApplication()](https://discord.js.org/#/docs/main/master/class/Client?scrollTo=fetchApplication) but attaches the resolved value to {@link InlustrisClient#application}
@@ -108,7 +117,7 @@ export class InlustrisClient extends Client {
     }
 
     /**
-     * Internal method, resolves a plugin as internal or external.
+     * Internal method. Resolves a plugin as internal or external.
      * @param {string} plugin Name of the plugin to resolve
      * @returns {string | InlustrisPlugin}
      * @private

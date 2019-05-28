@@ -35,6 +35,7 @@
     * [.util](#InlustrisClient+util) : [<code>ClientUtil</code>](#ClientUtil) \| <code>null</code>
     * [.application](#InlustrisClient+application) : [<code>ClientApplication</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * [.owners](#InlustrisClient+owners) : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
+    * [.plugins](#InlustrisClient+plugins) : <code>List.&lt;string&gt;</code>
     * [.fetchApplication()](#InlustrisClient+fetchApplication) ⇒ [<code>Promise.&lt;ClientApplication&gt;</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * ~~[.login()](#InlustrisClient+login)~~
     * [.start()](#InlustrisClient+start) ⇒ <code>Promise.&lt;string&gt;</code>
@@ -66,6 +67,13 @@
 
 ### inlustrisClient.owners : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
 <p>The owners of the client, will only have one until teams support is added</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
+<a name="InlustrisClient+plugins"></a>
+
+### inlustrisClient.plugins : <code>List.&lt;string&gt;</code>
+<p>The plugins that will be loaded when the client starts</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
 **Read only**: true  
