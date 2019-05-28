@@ -4,7 +4,7 @@
 <dt><a href="#InlustrisClient">InlustrisClient</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Client">Client</a></code></dt>
 <dd><p>The base client for Inlustris.</p></dd>
 <dt><a href="#Argument">Argument</a> ⇐ <code><a href="#AliasPiece">AliasPiece</a></code></dt>
-<dd><p>Base argument class for creating arguments</p></dd>
+<dd><p>Base argument class for creating arguments.</p></dd>
 <dt><a href="#AliasPiece">AliasPiece</a> ⇐ <code><a href="#Piece">Piece</a></code></dt>
 <dd><p>The base piece for all pieces with aliases.</p></dd>
 <dt><a href="#AliasStore">AliasStore</a> ⇐ <code><a href="#Store">Store</a></code></dt>
@@ -13,6 +13,8 @@
 <dd><p>The base piece from which all pieces extend.</p></dd>
 <dt><a href="#Store">Store</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Collection">Collection</a></code></dt>
 <dd><p>The common base for all stores.</p></dd>
+<dt><a href="#Possible">Possible</a></dt>
+<dd><p>Represents a possibility in a usage Tag</p></dd>
 <dt><a href="#ClientUtil">ClientUtil</a></dt>
 <dd><p>Utility methods to use for common tasks.</p></dd>
 <dt><a href="#InlustrisError">InlustrisError</a> ⇐ <code>Error</code></dt>
@@ -117,7 +119,7 @@
 <a name="Argument"></a>
 
 ## Argument ⇐ [<code>AliasPiece</code>](#AliasPiece)
-<p>Base argument class for creating arguments</p>
+<p>Base argument class for creating arguments.</p>
 
 **Kind**: global class  
 **Extends**: [<code>AliasPiece</code>](#AliasPiece)  
@@ -779,6 +781,59 @@
 
 **Kind**: instance method of [<code>Store</code>](#Store)  
 **Returns**: <code>Promise.&lt;number&gt;</code> - <p>The number of pieces loaded</p>  
+<a name="Possible"></a>
+
+## Possible
+<p>Represents a possibility in a usage Tag</p>
+
+**Kind**: global class  
+
+* [Possible](#Possible)
+    * [new Possible(regexResults)](#new_Possible_new)
+    * [.name](#Possible+name) : <code>string</code>
+    * [.type](#Possible+type) : <code>string</code>
+    * [.min](#Possible+min) : <code>number</code>
+    * [.max](#Possible+max) : <code>number</code>
+    * [.regex](#Possible+regex) : <code>RegExp</code>
+
+<a name="new_Possible_new"></a>
+
+### new Possible(regexResults)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| regexResults | <code>Array.&lt;string&gt;</code> | <p>The regex results from parsing the tag member</p> |
+
+<a name="Possible+name"></a>
+
+### possible.name : <code>string</code>
+<p>The name of this possible</p>
+
+**Kind**: instance property of [<code>Possible</code>](#Possible)  
+<a name="Possible+type"></a>
+
+### possible.type : <code>string</code>
+<p>The type of this possible</p>
+
+**Kind**: instance property of [<code>Possible</code>](#Possible)  
+<a name="Possible+min"></a>
+
+### possible.min : <code>number</code>
+<p>The min of this possible</p>
+
+**Kind**: instance property of [<code>Possible</code>](#Possible)  
+<a name="Possible+max"></a>
+
+### possible.max : <code>number</code>
+<p>The max of this possible</p>
+
+**Kind**: instance property of [<code>Possible</code>](#Possible)  
+<a name="Possible+regex"></a>
+
+### possible.regex : <code>RegExp</code>
+<p>The regex of this possible</p>
+
+**Kind**: instance property of [<code>Possible</code>](#Possible)  
 <a name="ClientUtil"></a>
 
 ## ClientUtil

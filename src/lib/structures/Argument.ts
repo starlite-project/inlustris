@@ -2,7 +2,7 @@ import { MENTION_REGEX } from '../util/Constants';
 import { AliasPiece } from './base/AliasPiece';
 
 /**
- * Base argument class for creating arguments
+ * Base argument class for creating arguments.
  * @extends {AliasPiece}
  */
 export abstract class Argument extends AliasPiece {
@@ -15,7 +15,7 @@ export abstract class Argument extends AliasPiece {
      * @property {RegExp} role Regex for roles
      * @property {RegExp} snowflake Regex for simple snowflake ids
      */
-    public static regex = MENTION_REGEX;
+    public static regex: object = MENTION_REGEX;
 
     public abstract run(arg: string, possible: any, msg: any): any;
 }
