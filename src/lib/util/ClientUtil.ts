@@ -5,6 +5,8 @@ import { List } from './List';
 
 /**
  * Utility methods to use for common tasks.
+ * Will only be attached to the client if `util`, `internals`, or `defaults` is passed to {@link InlustrisOptions#plugins}
+ * or used with {@link InlustrisClient#use use}.
  */
 export class ClientUtil {
     public constructor(public readonly client: InlustrisClient) { }
@@ -17,7 +19,7 @@ export class ClientUtil {
      * @param {boolean} [wholeWord=false] Makes finding by name match whole word only
      * @returns {external:User}
      */
-    public resolveUser(text: string, users: Discord.Collection<Discord.Snowflake, Discord.User>, caseSensitive = false, wholeWord = false): Discord.User | undefined {
+    public resolveUser(text: string, users: Discord.Collection<Discord.Snowflake, Discord.User>, caseSensitive: boolean = false, wholeWord: boolean = false): Discord.User | undefined {
         return users.get(text) || users.find((user): boolean => this.checkUser(text, user, caseSensitive, wholeWord));
     }
 
@@ -29,7 +31,7 @@ export class ClientUtil {
      * @param {boolean} [wholeWord=false] Makes finding by name match whole word only
      * @returns {Collection<Snowflake, User>}
      */
-    public resolveUsers(text: string, users: Discord.Collection<Discord.Snowflake, Discord.User>, caseSensitive = false, wholeWord = false): Discord.Collection<Discord.Snowflake, Discord.User> {
+    public resolveUsers(text: string, users: Discord.Collection<Discord.Snowflake, Discord.User>, caseSensitive: boolean = false, wholeWord: boolean = false): Discord.Collection<Discord.Snowflake, Discord.User> {
         return users.filter((user): boolean => this.checkUser(text, user, caseSensitive, wholeWord));
     }
 
