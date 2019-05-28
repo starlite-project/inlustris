@@ -5,4 +5,5 @@ export interface InlustrisOptions extends ClientOptions {
     prefix?: string;
     token?: string;
     owners?: string[];
+    createPiecesFolders?: boolean;
 }
