@@ -4,9 +4,7 @@
 <dt><a href="#InlustrisClient">InlustrisClient</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Client">Client</a></code></dt>
 <dd><p>The base client for Inlustris.</p></dd>
 <dt><a href="#ClientUtil">ClientUtil</a></dt>
-<dd><p>Utility methods to use for common tasks.
-Will only be attached to the client if <code>util</code>, <code>internals</code>, or <code>defaults</code> is passed to [InlustrisOptions#plugins](InlustrisOptions#plugins)
-or used with [use](#InlustrisClient+use).</p></dd>
+<dd><p>Utility methods to use for common tasks.</p></dd>
 <dt><a href="#InlustrisError">InlustrisError</a> ⇐ <code>Error</code></dt>
 <dd><p>An error class used to make error throwing universal.</p></dd>
 <dt><a href="#List">List</a> ⇐ <code>Set</code></dt>
@@ -117,9 +115,7 @@ or used with [use](#InlustrisClient+use).</p></dd>
 <a name="ClientUtil"></a>
 
 ## ClientUtil
-<p>Utility methods to use for common tasks.
-Will only be attached to the client if <code>util</code>, <code>internals</code>, or <code>defaults</code> is passed to [InlustrisOptions#plugins](InlustrisOptions#plugins)
-or used with [use](#InlustrisClient+use).</p>
+<p>Utility methods to use for common tasks.</p>
 
 **Kind**: global class  
 

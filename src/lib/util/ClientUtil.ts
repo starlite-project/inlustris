@@ -5,8 +5,6 @@ import { List } from './List';
 
 /**
  * Utility methods to use for common tasks.
- * Will only be attached to the client if `util`, `internals`, or `defaults` is passed to {@link InlustrisOptions#plugins}
- * or used with {@link InlustrisClient#use use}.
  */
 export class ClientUtil {
     public constructor(public readonly client: InlustrisClient) { }
