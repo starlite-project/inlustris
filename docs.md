@@ -3,10 +3,6 @@
 <dl>
 <dt><a href="#InlustrisClient">InlustrisClient</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Client">Client</a></code></dt>
 <dd><p>The base client for Inlustris.</p></dd>
-<dt><a href="#BaseDispatcher">BaseDispatcher</a></dt>
-<dd><p>The base dispatcher to handle the dispatching of bases.</p></dd>
-<dt><a href="#BaseRegistry">BaseRegistry</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Collection">Collection</a></code></dt>
-<dd><p>The base registry for all stores to extend.</p></dd>
 <dt><a href="#Base">Base</a></dt>
 <dd><p>The base class for all pieces.</p></dd>
 <dt><a href="#ClientUtil">ClientUtil</a></dt>
@@ -17,6 +13,13 @@
 <dd><p>A Set with additional utility methods.</p></dd>
 <dt><a href="#Util">Util</a></dt>
 <dd><p>Internal utility class.</p></dd>
+</dl>
+
+## Members
+
+<dl>
+<dt><a href="#_Symbol$species">_Symbol$species</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Collection">Collection</a></code></dt>
+<dd><p>The base registry for all stores to extend.</p></dd>
 </dl>
 
 ## Typedefs
@@ -42,6 +45,7 @@
     * [new InlustrisClient([options])](#new_InlustrisClient_new)
     * [.util](#InlustrisClient+util) : [<code>ClientUtil</code>](#ClientUtil) \| <code>null</code>
     * [.application](#InlustrisClient+application) : [<code>ClientApplication</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
+    * [.events](#InlustrisClient+events) : <code>EventRegistry</code>
     * [.owners](#InlustrisClient+owners) : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
     * [.plugins](#InlustrisClient+plugins) : <code>List.&lt;string&gt;</code>
     * [.fetchApplication()](#InlustrisClient+fetchApplication) ⇒ [<code>Promise.&lt;ClientApplication&gt;</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
@@ -74,6 +78,13 @@
 <p>The application of the client</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+<a name="InlustrisClient+events"></a>
+
+### inlustrisClient.events : <code>EventRegistry</code>
+<p>The event registry for all the events</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
 <a name="InlustrisClient+owners"></a>
 
 ### inlustrisClient.owners : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
@@ -156,72 +167,6 @@
 | --- | --- | --- |
 | base | [<code>Base</code>](#Base) | <p>The base that was disabled</p> |
 
-<a name="BaseDispatcher"></a>
-
-## *BaseDispatcher*
-<p>The base dispatcher to handle the dispatching of bases.</p>
-
-**Kind**: global abstract class  
-
-* *[BaseDispatcher](#BaseDispatcher)*
-    * *[.client](#BaseDispatcher+client) : [<code>InlustrisClient</code>](#InlustrisClient)*
-    * *[.registry](#BaseDispatcher+registry) : [<code>BaseRegistry</code>](#BaseRegistry)*
-
-<a name="BaseDispatcher+client"></a>
-
-### *baseDispatcher.client : [<code>InlustrisClient</code>](#InlustrisClient)*
-<p>The client this Dispatcher is for</p>
-
-**Kind**: instance property of [<code>BaseDispatcher</code>](#BaseDispatcher)  
-**Read only**: true  
-<a name="BaseDispatcher+registry"></a>
-
-### *baseDispatcher.registry : [<code>BaseRegistry</code>](#BaseRegistry)*
-<p>The registry this dispatcher is for</p>
-
-**Kind**: instance property of [<code>BaseDispatcher</code>](#BaseDispatcher)  
-**Read only**: true  
-<a name="BaseRegistry"></a>
-
-## *BaseRegistry ⇐ [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)*
-<p>The base registry for all stores to extend.</p>
-
-**Kind**: global abstract class  
-**Extends**: [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)  
-
-* *[BaseRegistry](#BaseRegistry) ⇐ [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)*
-    * *[.holds](#BaseRegistry+holds) : [<code>InlustrisClient</code>](#InlustrisClient)*
-    * *[.name](#BaseRegistry+name) : <code>string</code>*
-    * *[.holds](#BaseRegistry+holds) : [<code>Base</code>](#Base)*
-    * *[.userDirectory](#BaseRegistry+userDirectory) : <code>string</code>*
-
-<a name="BaseRegistry+holds"></a>
-
-### *baseRegistry.holds : [<code>InlustrisClient</code>](#InlustrisClient)*
-<p>The client that this Registry is for</p>
-
-**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
-**Read only**: true  
-<a name="BaseRegistry+name"></a>
-
-### *baseRegistry.name : <code>string</code>*
-<p>The name of the Registry</p>
-
-**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
-**Read only**: true  
-<a name="BaseRegistry+holds"></a>
-
-### *baseRegistry.holds : [<code>Base</code>](#Base)*
-<p>What this Registry holds</p>
-
-**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
-**Read only**: true  
-<a name="BaseRegistry+userDirectory"></a>
-
-### *baseRegistry.userDirectory : <code>string</code>*
-<p>The directory where the bases are found</p>
-
-**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
 <a name="Base"></a>
 
 ## *Base*
@@ -233,7 +178,7 @@
     * *[new Base(client, [options])](#new_Base_new)*
     * *[.client](#Base+client) : [<code>InlustrisClient</code>](#InlustrisClient)*
     * *[.options](#Base+options) : [<code>BaseOptions</code>](#BaseOptions)*
-    * *[.store](#Base+store) : <code>BaseStore</code>*
+    * *[.registry](#Base+registry) : <code>BaseStore</code>*
     * *[.id](#Base+id) : <code>string</code>*
     * *[.enabled](#Base+enabled) : <code>boolean</code>*
     * *[.enable()](#Base+enable) ⇒ [<code>Base</code>](#Base)*
@@ -264,10 +209,10 @@
 
 **Kind**: instance property of [<code>Base</code>](#Base)  
 **Read only**: true  
-<a name="Base+store"></a>
+<a name="Base+registry"></a>
 
-### *base.store : <code>BaseStore</code>*
-<p>The store that holds this base</p>
+### *base.registry : <code>BaseStore</code>*
+<p>The Registry that holds this base</p>
 
 **Kind**: instance property of [<code>Base</code>](#Base)  
 **Read only**: true  
@@ -1075,6 +1020,13 @@ The sort is not necessarily stable. The default sort order is according to strin
 | --- | --- | --- |
 | inp | <code>function</code> | <p>The input to check</p> |
 
+<a name="_Symbol$species"></a>
+
+## *\_Symbol$species ⇐ [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)*
+<p>The base registry for all stores to extend.</p>
+
+**Kind**: global abstract variable  
+**Extends**: [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)  
 <a name="InlustrisPlugin"></a>
 
 ## InlustrisPlugin : <code>Object</code>

@@ -7,6 +7,7 @@ import { List } from './util/List';
 import { Util } from './util/Util';
 import { DefaultOptions } from './util/Constants';
 import { dirname } from 'path';
+import { EventRegistry } from './registries/EventRegistry';
 
 
 /**
@@ -21,6 +22,7 @@ export class InlustrisClient extends Client {
     [K: string]: any;
     public application: ClientApplication | null;
     public userBaseDirectory: string;
+    public readonly events: EventRegistry;
     /**
      * Creates a new client.
      * @param {InlustrisOptions} [options={}] Options to use when loading the client.
@@ -60,6 +62,15 @@ export class InlustrisClient extends Client {
          * @type {?external:ClientApplication}
          */
         this.application = null;
+
+        /**
+         * The event registry for all the events
+         * @type {EventRegistry}
+         * @readonly
+         */
+        this.events = new EventRegistry(this);
+
+        this.events.registerCoreDirectory(this.userBaseDirectory);
     }
 
     /**
@@ -108,6 +119,7 @@ export class InlustrisClient extends Client {
      * @returns {Promise<string>}
      */
     public async start(): Promise<string> {
+        await this.events.loadAll();
         for (const plugin of this._plugins) {
             const resolved = this._resolvePlugin(plugin);
             if (typeof resolved === 'string') continue;
