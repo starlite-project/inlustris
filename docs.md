@@ -48,6 +48,12 @@
     * [.events](#InlustrisClient+events) : <code>EventRegistry</code>
     * [.owners](#InlustrisClient+owners) : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
     * [.plugins](#InlustrisClient+plugins) : <code>List.&lt;string&gt;</code>
+    * [.text](#InlustrisClient+text) : <code>Collection.&lt;string, TextChannel&gt;</code>
+    * [.voiceChannels](#InlustrisClient+voiceChannels) : <code>Collection.&lt;string, VoiceChannel&gt;</code>
+    * [.news](#InlustrisClient+news) : <code>Collection.&lt;string, NewsChannel&gt;</code>
+    * [.store](#InlustrisClient+store) : <code>Collection.&lt;string, StoreChannel&gt;</code>
+    * [.category](#InlustrisClient+category) : <code>Collection.&lt;string, CategoryChannel&gt;</code>
+    * [.dm](#InlustrisClient+dm) : <code>Collection.&lt;string, DMChannel&gt;</code>
     * [.fetchApplication()](#InlustrisClient+fetchApplication) ⇒ [<code>Promise.&lt;ClientApplication&gt;</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * ~~[.login()](#InlustrisClient+login)~~
     * [.start()](#InlustrisClient+start) ⇒ <code>Promise.&lt;string&gt;</code>
@@ -96,6 +102,48 @@
 
 ### inlustrisClient.plugins : <code>List.&lt;string&gt;</code>
 <p>The plugins that will be loaded when the client starts</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
+<a name="InlustrisClient+text"></a>
+
+### inlustrisClient.text : <code>Collection.&lt;string, TextChannel&gt;</code>
+<p>All the text channels the client can see</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
+<a name="InlustrisClient+voiceChannels"></a>
+
+### inlustrisClient.voiceChannels : <code>Collection.&lt;string, VoiceChannel&gt;</code>
+<p>All the voice channels the client can see (named this was as Client#voice is the <code>ClientVoiceManager</code>)</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
+<a name="InlustrisClient+news"></a>
+
+### inlustrisClient.news : <code>Collection.&lt;string, NewsChannel&gt;</code>
+<p>All the news channels the client can see</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
+<a name="InlustrisClient+store"></a>
+
+### inlustrisClient.store : <code>Collection.&lt;string, StoreChannel&gt;</code>
+<p>All the store channels the client can see</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
+<a name="InlustrisClient+category"></a>
+
+### inlustrisClient.category : <code>Collection.&lt;string, CategoryChannel&gt;</code>
+<p>All the category channels the client can see</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
+<a name="InlustrisClient+dm"></a>
+
+### inlustrisClient.dm : <code>Collection.&lt;string, DMChannel&gt;</code>
+<p>All the DM channels the client can see</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
 **Read only**: true  

@@ -1,13 +1,15 @@
-import { Client, ClientOptions, ClientApplication, User, UserResolvable } from 'discord.js';
+import { Client, ClientApplication, User, UserResolvable, Collection, TextChannel, VoiceChannel, NewsChannel, StoreChannel, CategoryChannel, DMChannel } from 'discord.js';
+import { dirname, join } from 'path';
 import { InlustrisOptions } from './interfaces/InlustrisOptions';
 import { InlustrisPlugin } from './interfaces/InlustrisPlugin';
+import { BaseRegistry } from './registries/BaseRegistry';
+import { EventRegistry } from './registries/EventRegistry';
+import { Base } from './structures/Base';
 import { ClientUtil } from './util/ClientUtil';
+import { DefaultOptions } from './util/Constants';
 import { InlustrisError } from './util/InlustrisError';
 import { List } from './util/List';
 import { Util } from './util/Util';
-import { DefaultOptions } from './util/Constants';
-import { dirname } from 'path';
-import { EventRegistry } from './registries/EventRegistry';
 
 
 /**
@@ -23,6 +25,7 @@ export class InlustrisClient extends Client {
     public application: ClientApplication | null;
     public userBaseDirectory: string;
     public readonly events: EventRegistry;
+    private registries: List<BaseRegistry<Base, typeof Base>>;
     /**
      * Creates a new client.
      * @param {InlustrisOptions} [options={}] Options to use when loading the client.
@@ -64,13 +67,19 @@ export class InlustrisClient extends Client {
         this.application = null;
 
         /**
+         * Every registry attached to the client, externals will automatically be attached
+         * @type {List<BaseRegistry>}
+         * @private
+         */
+        this.registries = new List<BaseRegistry<Base, typeof Base>>();
+
+        /**
          * The event registry for all the events
          * @type {EventRegistry}
          * @readonly
          */
         this.events = new EventRegistry(this);
-
-        this.events.registerCoreDirectory(this.userBaseDirectory);
+        this.registries.add(this.events);
     }
 
     /**
@@ -94,6 +103,60 @@ export class InlustrisClient extends Client {
      */
     public get plugins(): List<string> {
         return this._plugins;
+    }
+
+    /**
+     * All the text channels the client can see
+     * @type {Collection<string, TextChannel>}
+     * @readonly
+     */
+    public get text(): Collection<string, TextChannel> {
+        return this.channels.filter((chan): boolean => chan.type === 'text') as Collection<string, TextChannel>;
+    }
+
+    /**
+     * All the voice channels the client can see (named this was as Client#voice is the `ClientVoiceManager`)
+     * @type {Collection<string, VoiceChannel>}
+     * @readonly
+     */
+    public get voiceChannels(): Collection<string, VoiceChannel> {
+        return this.channels.filter((chan): boolean => chan.type === 'voice') as Collection<string, VoiceChannel>;
+    }
+
+    /**
+     * All the news channels the client can see
+     * @type {Collection<string, NewsChannel>}
+     * @readonly
+     */
+    public get news(): Collection<string, NewsChannel> {
+        return this.channels.filter((chan): boolean => chan.type === 'news') as Collection<string, NewsChannel>;
+    }
+
+    /**
+     * All the store channels the client can see
+     * @type {Collection<string, StoreChannel>}
+     * @readonly
+     */
+    public get store(): Collection<string, StoreChannel> {
+        return this.channels.filter((chan): boolean => chan.type === 'news') as Collection<string, StoreChannel>;
+    }
+
+    /**
+     * All the category channels the client can see
+     * @type {Collection<string, CategoryChannel>}
+     * @readonly
+     */
+    public get category(): Collection<string, CategoryChannel> {
+        return this.channels.filter((chan): boolean => chan.type === 'category') as Collection<string, CategoryChannel>;
+    }
+
+    /**
+     * All the DM channels the client can see
+     * @type {Collection<string, DMChannel>}
+     * @readonly
+     */
+    public get dm(): Collection<string, DMChannel> {
+        return this.channels.filter((chan): boolean => chan.type === 'dm') as Collection<string, DMChannel>;
     }
 
     /**
@@ -125,6 +188,9 @@ export class InlustrisClient extends Client {
             if (typeof resolved === 'string') continue;
             await this._loadPlugin(resolved);
         }
+        const coreDirectory = join(__dirname, '..', '/');
+        for (const registry of this.registries.values()) registry.registerCoreDirectory(coreDirectory);
+
         return super.login(this._token);
     }
 
@@ -170,6 +236,7 @@ export class InlustrisClient extends Client {
     private async _loadPlugin(plugin: InlustrisPlugin): Promise<void> {
         try {
             this[plugin.name] = await plugin.loader.call(this);
+            if (this[plugin.name] instanceof BaseRegistry) this.registries.add(this[plugin.name]);
         } catch (e) {
             throw new InlustrisError('FAILED_TO_LOAD', plugin.name, e);
         }
