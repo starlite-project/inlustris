@@ -483,6 +483,7 @@ Only applied if <code>settings</code>, <code>internals</code>, or <code>defaults
     * [.has(key)](#ClientCacheManager+has) ⇒ <code>boolean</code>
     * [.get(key, [defaultVal])](#ClientCacheManager+get) ⇒ <code>any</code>
     * [.delete(key, [preserve])](#ClientCacheManager+delete) ⇒ <code>boolean</code>
+    * [._Symbol$iterator()](#ClientCacheManager+_Symbol$iterator)
 
 <a name="new_ClientCacheManager_new"></a>
 
@@ -565,6 +566,12 @@ Only applied if <code>settings</code>, <code>internals</code>, or <code>defaults
 | key | <code>string</code> |  | <p>The key to delete</p> |
 | [preserve] | <code>boolean</code> | <code>true</code> | <p>Whether to preserve the key in the keys list</p> |
 
+<a name="ClientCacheManager+_Symbol$iterator"></a>
+
+### clientCacheManager.\_Symbol$iterator()
+<p>Yields the <code>ClientCacheManager#values</code> generator.</p>
+
+**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
 <a name="Base"></a>
 
 ## *Base*

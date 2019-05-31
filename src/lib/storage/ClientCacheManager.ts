@@ -107,4 +107,13 @@ export class ClientCacheManager {
         if (!preserve) this._keys.delete(key);
         return this._cache.delete(key);
     }
+
+    /**
+     * Yields the `ClientCacheManager#values` generator.
+     * @generator
+     * @yields {IterableIterator<any>}
+     */
+    public *[Symbol.iterator](): IterableIterator<any> {
+        yield* this.values();
+    }
 }
