@@ -191,6 +191,8 @@ export class InlustrisClient extends Client {
         const coreDirectory = join(__dirname, '..', '/');
         for (const registry of this.registries.values()) registry.registerCoreDirectory(coreDirectory);
 
+        const loaded = await Promise.all(this.registries.map(async (registry): Promise<string> => `Loaded ${await registry.loadAll()} ${registry.name}`));
+
         return super.login(this._token);
     }
 

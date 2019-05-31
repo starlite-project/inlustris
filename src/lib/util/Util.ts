@@ -54,12 +54,12 @@ export class Util {
             return output;
         }
         if (source instanceof Map) {
-            const output = new (source.constructor() as Constructable<Map<any, any>>)();
+            const output = new (source.constructor as Constructable<Map<any, any>>)();
             for (const [key, value] of source.entries()) output.set(key, this.deepClone(value));
             return output;
         }
         if (source instanceof Set) {
-            const output = new (source.constructor() as Constructable<Set<any>>)();
+            const output = new (source.constructor as Constructable<Set<any>>)();
             for (const value of source.values()) output.add(this.deepClone(value));
             return output;
         }

@@ -65,3 +65,6 @@ dist/
 
 # typescript cache
 .cache/
+
+# Test keys
+config.json
