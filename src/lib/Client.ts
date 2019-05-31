@@ -248,7 +248,7 @@ export class InlustrisClient extends Client {
      * @returns {InlustrisClient}
      */
     public use(mod: string): this {
-        this._plugins.add(mod);
+        this.plugins.add(mod);
         return this;
     }
 
