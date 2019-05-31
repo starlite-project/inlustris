@@ -1,4 +1,3 @@
-
 /**
  * A Set with additional utility methods.
  * @extends {Set}

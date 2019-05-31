@@ -1,7 +1,7 @@
-import { BaseRegistry } from './BaseRegistry';
+import { InlustrisClient } from '../Client';
 import { Event } from '../structures/Event';
 import { List } from '../util/List';
-import { InlustrisClient } from '../Client';
+import { BaseRegistry } from './BaseRegistry';
 
 /**
  * The event registry for loading events

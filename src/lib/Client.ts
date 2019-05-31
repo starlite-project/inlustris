@@ -1,4 +1,4 @@
-import { Client, ClientApplication, User, UserResolvable, Collection, TextChannel, VoiceChannel, NewsChannel, StoreChannel, CategoryChannel, DMChannel, GuildMember } from 'discord.js';
+import { CategoryChannel, Client, ClientApplication, Collection, DMChannel, GuildMember, NewsChannel, StoreChannel, TextChannel, User, UserResolvable, VoiceChannel } from 'discord.js';
 import { dirname, join } from 'path';
 import { InlustrisOptions } from './interfaces/InlustrisOptions';
 import { InlustrisPlugin } from './interfaces/InlustrisPlugin';

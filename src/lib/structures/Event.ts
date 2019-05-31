@@ -1,8 +1,8 @@
-import { Base } from './Base';
+import { EventEmitter } from 'events';
 import { InlustrisClient } from '../Client';
 import { EventOptions } from '../interfaces/EventOptions';
-import { EventEmitter } from 'events';
 import { EventRegistry } from '../registries/EventRegistry';
+import { Base } from './Base';
 
 /**
  * The event class for creating events.

@@ -1,6 +1,6 @@
 import { Collection } from 'discord.js';
-import { scan, ensureDir } from 'fs-nextra';
-import { join, extname, relative, sep } from 'path';
+import { ensureDir, scan } from 'fs-nextra';
+import { extname, join, relative, sep } from 'path';
 import { InlustrisClient } from '../Client';
 import { Base } from '../structures/Base';
 import { List } from '../util/List';

@@ -1,5 +1,5 @@
-import { BaseOptions } from './BaseOptions';
 import { EventEmitter } from 'events';
+import { BaseOptions } from './BaseOptions';
 
 export interface EventOptions extends BaseOptions {
     event?: string;
