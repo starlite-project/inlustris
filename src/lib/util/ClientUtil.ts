@@ -1,3 +1,5 @@
+// Copyright (c) 2017-2019 1Computer1. All rights reserved. MIT License.
+
 import * as Discord from 'discord.js';
 import { Stream } from 'stream';
 import { InlustrisClient } from '../Client';
