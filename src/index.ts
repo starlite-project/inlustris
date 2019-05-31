@@ -13,3 +13,4 @@ export { BaseRegistry } from './lib/registries/BaseRegistry';
 export { EventRegistry } from './lib/registries/EventRegistry';
 export { Base } from './lib/structures/Base';
 export { Event } from './lib/structures/Event';
+export { ClientCacheManager } from './lib/storage/ClientCacheManager';

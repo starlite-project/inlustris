@@ -7,6 +7,9 @@
 <dd></dd>
 <dt><a href="#EventRegistry">EventRegistry</a> ⇐ <code><a href="#BaseRegistry">BaseRegistry</a></code></dt>
 <dd><p>The event registry for loading events</p></dd>
+<dt><a href="#ClientCacheManager">ClientCacheManager</a></dt>
+<dd><p>The cache manager for the client.
+Only applied if <code>settings</code>, <code>internals</code>, or <code>defaults</code> is a loaded plugin.</p></dd>
 <dt><a href="#Base">Base</a></dt>
 <dd><p>The base class for all pieces.</p></dd>
 <dt><a href="#Event">Event</a> ⇐ <code><a href="#Base">Base</a></code></dt>
@@ -35,6 +38,13 @@
 <dd><p>The required export to load an external plugin</p></dd>
 <dt><a href="#InlustrisOptions">InlustrisOptions</a> : <code><a href="https://discord.js.org/#/docs/main/master/typedef/ClientOptions">ClientOptions</a></code></dt>
 <dd><p>Options for a new [InlustrisClient](#InlustrisClient)</p></dd>
+<dt><a href="#InternalPlugins">InternalPlugins</a> : <code>string</code></dt>
+<dd><p>A list of internal plugins. Calling <code>internals</code> or <code>defaults</code> as a loaded plugin
+will load all of them.</p>
+<ul>
+<li><code>util</code> adds client utility methods.</li>
+<li><code>settings</code> adds settings to the client (WIP).</li>
+</ul></dd>
 <dt><a href="#BaseOptions">BaseOptions</a> : <code>Object</code></dt>
 <dd><p>The base options for a module</p></dd>
 </dl>
@@ -49,7 +59,8 @@
 
 * [InlustrisClient](#InlustrisClient) ⇐ [<code>Client</code>](https://discord.js.org/#/docs/main/master/class/Client)
     * [new InlustrisClient([options])](#new_InlustrisClient_new)
-    * [.util](#InlustrisClient+util) : [<code>ClientUtil</code>](#ClientUtil) \| <code>null</code>
+    * [.util](#InlustrisClient+util) : [<code>ClientUtil</code>](#ClientUtil)
+    * [.cache](#InlustrisClient+cache) : [<code>ClientCacheManager</code>](#ClientCacheManager)
     * [.application](#InlustrisClient+application) : [<code>ClientApplication</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * [.events](#InlustrisClient+events) : [<code>EventRegistry</code>](#EventRegistry)
     * [.owners](#InlustrisClient+owners) : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
@@ -83,8 +94,14 @@
 
 <a name="InlustrisClient+util"></a>
 
-### inlustrisClient.util : [<code>ClientUtil</code>](#ClientUtil) \| <code>null</code>
+### inlustrisClient.util : [<code>ClientUtil</code>](#ClientUtil)
 <p>A [ClientUtil](#ClientUtil) to use, will only be loaded if <code>internals</code>, <code>defaults</code>, or <code>util</code> is specified in [InlustrisOptions#plugins](InlustrisOptions#plugins) or used with [use](#InlustrisClient+use)</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+<a name="InlustrisClient+cache"></a>
+
+### inlustrisClient.cache : [<code>ClientCacheManager</code>](#ClientCacheManager)
+<p>The cache manager, will only be loaded if <code>internals</code>, <code>defaults</code>, or <code>util</code> is specified as a plugin to load</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
 <a name="InlustrisClient+application"></a>
@@ -448,6 +465,106 @@ is ready.</p>
 
 **Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
 **Overrides**: [<code>loadAll</code>](#BaseRegistry+loadAll)  
+<a name="ClientCacheManager"></a>
+
+## ClientCacheManager
+<p>The cache manager for the client.
+Only applied if <code>settings</code>, <code>internals</code>, or <code>defaults</code> is a loaded plugin.</p>
+
+**Kind**: global class  
+
+* [ClientCacheManager](#ClientCacheManager)
+    * [new ClientCacheManager(client)](#new_ClientCacheManager_new)
+    * [.client](#ClientCacheManager+client) : [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.cache](#ClientCacheManager+cache) : <code>Collection.&lt;string, any&gt;</code>
+    * [.keys()](#ClientCacheManager+keys)
+    * [.values()](#ClientCacheManager+values)
+    * [.set(key, val)](#ClientCacheManager+set) ⇒ [<code>ClientCacheManager</code>](#ClientCacheManager)
+    * [.has(key)](#ClientCacheManager+has) ⇒ <code>boolean</code>
+    * [.get(key, [defaultVal])](#ClientCacheManager+get) ⇒ <code>any</code>
+    * [.delete(key, [preserve])](#ClientCacheManager+delete) ⇒ <code>boolean</code>
+
+<a name="new_ClientCacheManager_new"></a>
+
+### new ClientCacheManager(client)
+
+| Param | Type |
+| --- | --- |
+| client | [<code>InlustrisClient</code>](#InlustrisClient) | 
+
+<a name="ClientCacheManager+client"></a>
+
+### clientCacheManager.client : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client</p>
+
+**Kind**: instance property of [<code>ClientCacheManager</code>](#ClientCacheManager)  
+**Read only**: true  
+<a name="ClientCacheManager+cache"></a>
+
+### clientCacheManager.cache : <code>Collection.&lt;string, any&gt;</code>
+<p>The cache that is managed</p>
+
+**Kind**: instance property of [<code>ClientCacheManager</code>](#ClientCacheManager)  
+**Read only**: true  
+<a name="ClientCacheManager+keys"></a>
+
+### clientCacheManager.keys()
+<p>An iterable keys object.</p>
+
+**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
+<a name="ClientCacheManager+values"></a>
+
+### clientCacheManager.values()
+<p>An iterable values object.</p>
+
+**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
+<a name="ClientCacheManager+set"></a>
+
+### clientCacheManager.set(key, val) ⇒ [<code>ClientCacheManager</code>](#ClientCacheManager)
+<p>Sets a key and value.</p>
+
+**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | <p>A key to be added</p> |
+| val | <code>any</code> | <p>A value to be added</p> |
+
+<a name="ClientCacheManager+has"></a>
+
+### clientCacheManager.has(key) ⇒ <code>boolean</code>
+<p>Whether a key is located in the cache.</p>
+
+**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | <p>The key to check for</p> |
+
+<a name="ClientCacheManager+get"></a>
+
+### clientCacheManager.get(key, [defaultVal]) ⇒ <code>any</code>
+<p>Gets a value, and sets the default if the value isn't found.</p>
+
+**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | <p>The key to get</p> |
+| [defaultVal] | <code>any</code> | <p>The default value to set</p> |
+
+<a name="ClientCacheManager+delete"></a>
+
+### clientCacheManager.delete(key, [preserve]) ⇒ <code>boolean</code>
+<p>Deletes a key from the settings.</p>
+
+**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| key | <code>string</code> |  | <p>The key to delete</p> |
+| [preserve] | <code>boolean</code> | <code>true</code> | <p>Whether to preserve the key in the keys list</p> |
+
 <a name="Base"></a>
 
 ## *Base*
@@ -1441,6 +1558,17 @@ The sort is not necessarily stable. The default sort order is according to strin
 | token | <code>string</code> | <p>The token to use to log the client in</p> |
 | [plugins] | <code>Iterable.&lt;string&gt;</code> | <p>Plugins to load on start, this is the alternate to [use](#InlustrisClient+use)</p> |
 
+<a name="InternalPlugins"></a>
+
+## InternalPlugins : <code>string</code>
+<p>A list of internal plugins. Calling <code>internals</code> or <code>defaults</code> as a loaded plugin
+will load all of them.</p>
+<ul>
+<li><code>util</code> adds client utility methods.</li>
+<li><code>settings</code> adds settings to the client (WIP).</li>
+</ul>
+
+**Kind**: global typedef  
 <a name="BaseOptions"></a>
 
 ## BaseOptions : <code>Object</code>

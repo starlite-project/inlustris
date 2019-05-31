@@ -1,7 +1,8 @@
 const Messages = {
     PLUGIN_NOT_FOUND: (key: string): string => `The plugin ${key} was not found`,
     DEPRECATED_METHOD: (oldMethod: string, newMethod?: string): string => `The method ${oldMethod} is deprecated${newMethod ? `, please use the ${newMethod} method instead` : ''}`,
-    FAILED_TO_LOAD: (plugin: string, e: any): string => `The plugin ${plugin} failed to load\n${e}`
+    FAILED_TO_LOAD: (plugin: string, e: any): string => `The plugin ${plugin} failed to load\n${e}`,
+    INCORRECT_INPUT_TYPE: (given: string, expected: string): string => `Expected ${expected}, got ${given}`
 };
 
 /**

@@ -10,6 +10,7 @@ import { DefaultOptions } from './util/Constants';
 import { InlustrisError } from './util/InlustrisError';
 import { List } from './util/List';
 import { Util } from './util/Util';
+import { ClientCacheManager } from './storage/ClientCacheManager';
 
 
 /**
@@ -26,6 +27,7 @@ export class InlustrisClient extends Client {
     public userBaseDirectory: string;
     public readonly events: EventRegistry;
     private registries: List<BaseRegistry<Base, typeof Base>>;
+    public cache: ClientCacheManager | null;
     /**
      * Creates a new client.
      * @param {InlustrisOptions} [options={}] Options to use when loading the client.
@@ -49,9 +51,15 @@ export class InlustrisClient extends Client {
 
         /**
          * A {@link ClientUtil} to use, will only be loaded if `internals`, `defaults`, or `util` is specified in {@link InlustrisOptions#plugins} or used with {@link InlustrisClient#use}
-         * @type {ClientUtil | null}
+         * @type {?ClientUtil}
          */
         this.util = null;
+
+        /**
+         * The cache manager, will only be loaded if `internals`, `defaults`, or `util` is specified as a plugin to load
+         * @type {?ClientCacheManager}
+         */
+        this.cache = null;
 
         /**
          * The token to use to log in, used in the {@link InlustrisClient#start start} method
@@ -218,9 +226,14 @@ export class InlustrisClient extends Client {
                 this.util = new ClientUtil(this);
                 return plugin;
             }
+            case 'settings': {
+                this.cache = new ClientCacheManager(this);
+                return plugin;
+            }
             case 'internals':
             case 'defaults': {
                 this._resolvePlugin('util');
+                this._resolvePlugin('settings');
                 return plugin;
             }
             default: {
@@ -328,4 +341,12 @@ export class InlustrisClient extends Client {
  * Emitted when a base is unloaded.
  * @event InlustrisClient#baseUnloaded
  * @param {Base} base The base that was disabled
+ */
+
+/**
+ * A list of internal plugins. Calling `internals` or `defaults` as a loaded plugin
+ * will load all of them.
+ * - `util` adds client utility methods.
+ * - `settings` adds settings to the client (WIP).
+ * @typedef {string} InternalPlugins
  */
