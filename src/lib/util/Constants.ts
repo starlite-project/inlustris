@@ -5,7 +5,7 @@ export const DefaultOptions: InlustrisOptions = {
     token: '',
     plugins: new List<string>(),
     prefix: '!',
-    owners: ['']
+    owners: []
 };
 
 export const MENTION_REGEX = {

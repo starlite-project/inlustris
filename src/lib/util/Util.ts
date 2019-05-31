@@ -1,4 +1,7 @@
+// Copyright (c) 2017-2019 Dirigeants. All rights reserved. MIT License.
+
 import { Constructable } from 'discord.js';
+import { promisify } from 'util';
 
 export interface AnyObj {
     [K: string]: any;
@@ -15,6 +18,16 @@ export class Util {
     private constructor() {
         throw new Error('This class may not be initiated with new');
     }
+
+    /**
+     * Promisified version of `setTimeout` to be used with await.
+     * @param {number} delay The amount of time in ms to delay
+     * @param {*} [args] Any args to pass to the .then (mostly pointless in this form)
+     * @returns {Promise<*>}
+     * @method
+     * @static
+     */
+    public static sleep = promisify(setTimeout);
 
     public static PRIMITIVE_TYPES: string[] = ['string', 'number', 'bigint', 'boolean'];
 

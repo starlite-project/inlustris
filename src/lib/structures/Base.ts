@@ -85,6 +85,11 @@ export abstract class Base {
         return this;
     }
 
+    /**
+     * Unloads the base, and deletes it from the registry.
+     * @emits InlustrisClient#baseUnloaded
+     * @returns {void}
+     */
     public unload(): void {
         if (this.client.listenerCount('baseUnloaded')) this.client.emit('baseUnloaded', this);
         this.registry.delete(this.id);

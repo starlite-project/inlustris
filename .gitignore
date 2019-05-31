@@ -68,3 +68,6 @@ dist/
 
 # Test keys
 config.json
+
+# IDE files
+.vscode/

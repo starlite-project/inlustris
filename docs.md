@@ -3,8 +3,14 @@
 <dl>
 <dt><a href="#InlustrisClient">InlustrisClient</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Client">Client</a></code></dt>
 <dd><p>The base client for Inlustris.</p></dd>
+<dt><a href="#BaseRegistry">BaseRegistry</a></dt>
+<dd></dd>
+<dt><a href="#EventRegistry">EventRegistry</a> ⇐ <code><a href="#BaseRegistry">BaseRegistry</a></code></dt>
+<dd><p>The event registry for loading events</p></dd>
 <dt><a href="#Base">Base</a></dt>
 <dd><p>The base class for all pieces.</p></dd>
+<dt><a href="#Event">Event</a> ⇐ <code><a href="#Base">Base</a></code></dt>
+<dd><p>The event class for creating events.</p></dd>
 <dt><a href="#ClientUtil">ClientUtil</a></dt>
 <dd><p>Utility methods to use for common tasks.</p></dd>
 <dt><a href="#InlustrisError">InlustrisError</a> ⇐ <code>Error</code></dt>
@@ -18,7 +24,7 @@
 ## Members
 
 <dl>
-<dt><a href="#_Symbol$species">_Symbol$species</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Collection">Collection</a></code></dt>
+<dt><a href="#_Symbol$species">_Symbol$species</a></dt>
 <dd><p>The base registry for all stores to extend.</p></dd>
 </dl>
 
@@ -45,7 +51,7 @@
     * [new InlustrisClient([options])](#new_InlustrisClient_new)
     * [.util](#InlustrisClient+util) : [<code>ClientUtil</code>](#ClientUtil) \| <code>null</code>
     * [.application](#InlustrisClient+application) : [<code>ClientApplication</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
-    * [.events](#InlustrisClient+events) : <code>EventRegistry</code>
+    * [.events](#InlustrisClient+events) : [<code>EventRegistry</code>](#EventRegistry)
     * [.owners](#InlustrisClient+owners) : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
     * [.plugins](#InlustrisClient+plugins) : <code>List.&lt;string&gt;</code>
     * [.text](#InlustrisClient+text) : <code>Collection.&lt;string, TextChannel&gt;</code>
@@ -54,6 +60,7 @@
     * [.store](#InlustrisClient+store) : <code>Collection.&lt;string, StoreChannel&gt;</code>
     * [.category](#InlustrisClient+category) : <code>Collection.&lt;string, CategoryChannel&gt;</code>
     * [.dm](#InlustrisClient+dm) : <code>Collection.&lt;string, DMChannel&gt;</code>
+    * [.me](#InlustrisClient+me) : <code>Collection.&lt;string, ?GuildMember&gt;</code>
     * [.fetchApplication()](#InlustrisClient+fetchApplication) ⇒ [<code>Promise.&lt;ClientApplication&gt;</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * ~~[.login()](#InlustrisClient+login)~~
     * [.start()](#InlustrisClient+start) ⇒ <code>Promise.&lt;string&gt;</code>
@@ -61,6 +68,8 @@
     * [.isOwner(user)](#InlustrisClient+isOwner) ⇒ <code>boolean</code>
     * ["baseEnabled" (base)](#InlustrisClient+event_baseEnabled)
     * ["baseDisabled" (base)](#InlustrisClient+event_baseDisabled)
+    * ["clientReady"](#InlustrisClient+event_clientReady)
+    * ["baseUnloaded" (base)](#InlustrisClient+event_baseUnloaded)
 
 <a name="new_InlustrisClient_new"></a>
 
@@ -86,7 +95,7 @@
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
 <a name="InlustrisClient+events"></a>
 
-### inlustrisClient.events : <code>EventRegistry</code>
+### inlustrisClient.events : [<code>EventRegistry</code>](#EventRegistry)
 <p>The event registry for all the events</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
@@ -144,6 +153,13 @@
 
 ### inlustrisClient.dm : <code>Collection.&lt;string, DMChannel&gt;</code>
 <p>All the DM channels the client can see</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+**Read only**: true  
+<a name="InlustrisClient+me"></a>
+
+### inlustrisClient.me : <code>Collection.&lt;string, ?GuildMember&gt;</code>
+<p>A collection of all the <code>Guild#me</code> instances, mapped by Guild ID</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
 **Read only**: true  
@@ -215,6 +231,223 @@
 | --- | --- | --- |
 | base | [<code>Base</code>](#Base) | <p>The base that was disabled</p> |
 
+<a name="InlustrisClient+event_clientReady"></a>
+
+### "clientReady"
+<p>Emitted when the client is ready. Should be listened to over <code>Client#ready</code>
+as Inlustris uses that internallly to initialize the client once Discord data
+is ready.</p>
+
+**Kind**: event emitted by [<code>InlustrisClient</code>](#InlustrisClient)  
+<a name="InlustrisClient+event_baseUnloaded"></a>
+
+### "baseUnloaded" (base)
+<p>Emitted when a base is unloaded.</p>
+
+**Kind**: event emitted by [<code>InlustrisClient</code>](#InlustrisClient)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| base | [<code>Base</code>](#Base) | <p>The base that was disabled</p> |
+
+<a name="BaseRegistry"></a>
+
+## BaseRegistry
+**Kind**: global class  
+
+* [BaseRegistry](#BaseRegistry)
+    * [new BaseRegistry(client, name, holds)](#new_BaseRegistry_new)
+    * [.holds](#BaseRegistry+holds) : [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.name](#BaseRegistry+name) : <code>string</code>
+    * [.holds](#BaseRegistry+holds) : [<code>Base</code>](#Base)
+    * [.userDirectory](#BaseRegistry+userDirectory) : <code>string</code>
+    * [.registerCoreDirectory(directory)](#BaseRegistry+registerCoreDirectory) ⇒ <code>this</code>
+    * [.loadAll()](#BaseRegistry+loadAll) ⇒ <code>Promise.&lt;number&gt;</code>
+    * [.load(directory, file)](#BaseRegistry+load) ⇒ [<code>Base</code>](#Base)
+    * [.add(base)](#BaseRegistry+add) ⇒ [<code>Base</code>](#Base)
+
+<a name="new_BaseRegistry_new"></a>
+
+### new BaseRegistry(client, name, holds)
+<p>Creates a new BaseRegistry.</p>
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| client | [<code>InlustrisClient</code>](#InlustrisClient) | <p>The client</p> |
+| name | <code>string</code> | <p>The name of the registry</p> |
+| holds | <code>function</code> | <p>The class that the registry will use to create instances</p> |
+
+<a name="BaseRegistry+holds"></a>
+
+### baseRegistry.holds : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client that this Registry is for</p>
+
+**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
+**Read only**: true  
+<a name="BaseRegistry+name"></a>
+
+### baseRegistry.name : <code>string</code>
+<p>The name of the Registry</p>
+
+**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
+**Read only**: true  
+<a name="BaseRegistry+holds"></a>
+
+### baseRegistry.holds : [<code>Base</code>](#Base)
+<p>What this Registry holds</p>
+
+**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
+**Read only**: true  
+<a name="BaseRegistry+userDirectory"></a>
+
+### baseRegistry.userDirectory : <code>string</code>
+<p>The directory where the bases are found</p>
+
+**Kind**: instance property of [<code>BaseRegistry</code>](#BaseRegistry)  
+<a name="BaseRegistry+registerCoreDirectory"></a>
+
+### baseRegistry.registerCoreDirectory(directory) ⇒ <code>this</code>
+<p>Registers a core directory.</p>
+
+**Kind**: instance method of [<code>BaseRegistry</code>](#BaseRegistry)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| directory | <code>string</code> | <p>The directory to register</p> |
+
+<a name="BaseRegistry+loadAll"></a>
+
+### baseRegistry.loadAll() ⇒ <code>Promise.&lt;number&gt;</code>
+<p>Loads all the bases found in the core directories.</p>
+
+**Kind**: instance method of [<code>BaseRegistry</code>](#BaseRegistry)  
+<a name="BaseRegistry+load"></a>
+
+### baseRegistry.load(directory, file) ⇒ [<code>Base</code>](#Base)
+<p>Loads a base into the registry.</p>
+
+**Kind**: instance method of [<code>BaseRegistry</code>](#BaseRegistry)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| directory | <code>string</code> | <p>The directory of the base</p> |
+| file | <code>Array.&lt;string&gt;</code> | <p>The file location of the base</p> |
+
+<a name="BaseRegistry+add"></a>
+
+### baseRegistry.add(base) ⇒ [<code>Base</code>](#Base)
+<p>Adds a base to the registry.</p>
+
+**Kind**: instance method of [<code>BaseRegistry</code>](#BaseRegistry)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| base | [<code>Base</code>](#Base) | <p>The base to be added</p> |
+
+<a name="EventRegistry"></a>
+
+## EventRegistry ⇐ [<code>BaseRegistry</code>](#BaseRegistry)
+<p>The event registry for loading events</p>
+
+**Kind**: global class  
+**Extends**: [<code>BaseRegistry</code>](#BaseRegistry)  
+
+* [EventRegistry](#EventRegistry) ⇐ [<code>BaseRegistry</code>](#BaseRegistry)
+    * [.holds](#BaseRegistry+holds) : [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.name](#BaseRegistry+name) : <code>string</code>
+    * [.userDirectory](#BaseRegistry+userDirectory) : <code>string</code>
+    * [.load(directory, file)](#EventRegistry+load) ⇒ [<code>Event</code>](#Event)
+    * [.clear()](#EventRegistry+clear) ⇒ <code>void</code>
+    * [.delete(id)](#EventRegistry+delete) ⇒ <code>boolean</code>
+    * [.add(base)](#EventRegistry+add) ⇒ [<code>Event</code>](#Event)
+    * [.registerCoreDirectory(directory)](#BaseRegistry+registerCoreDirectory) ⇒ <code>this</code>
+    * [.loadAll()](#BaseRegistry+loadAll) ⇒ <code>Promise.&lt;number&gt;</code>
+
+<a name="BaseRegistry+holds"></a>
+
+### eventRegistry.holds : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client that this Registry is for</p>
+
+**Kind**: instance property of [<code>EventRegistry</code>](#EventRegistry)  
+**Overrides**: [<code>holds</code>](#BaseRegistry+holds)  
+**Read only**: true  
+<a name="BaseRegistry+name"></a>
+
+### eventRegistry.name : <code>string</code>
+<p>The name of the Registry</p>
+
+**Kind**: instance property of [<code>EventRegistry</code>](#EventRegistry)  
+**Overrides**: [<code>name</code>](#BaseRegistry+name)  
+**Read only**: true  
+<a name="BaseRegistry+userDirectory"></a>
+
+### eventRegistry.userDirectory : <code>string</code>
+<p>The directory where the bases are found</p>
+
+**Kind**: instance property of [<code>EventRegistry</code>](#EventRegistry)  
+**Overrides**: [<code>userDirectory</code>](#BaseRegistry+userDirectory)  
+<a name="EventRegistry+load"></a>
+
+### eventRegistry.load(directory, file) ⇒ [<code>Event</code>](#Event)
+<p>Loads the event, and checks if it's already been ran.</p>
+
+**Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
+**Overrides**: [<code>load</code>](#BaseRegistry+load)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| directory | <code>string</code> | <p>The directory to load from</p> |
+| file | <code>Array.&lt;string&gt;</code> | <p>The file location of the event</p> |
+
+<a name="EventRegistry+clear"></a>
+
+### eventRegistry.clear() ⇒ <code>void</code>
+<p>Clears the events.</p>
+
+**Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
+<a name="EventRegistry+delete"></a>
+
+### eventRegistry.delete(id) ⇒ <code>boolean</code>
+<p>Unlistens to and deletes an event.</p>
+
+**Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | <p>The ID of the event</p> |
+
+<a name="EventRegistry+add"></a>
+
+### eventRegistry.add(base) ⇒ [<code>Event</code>](#Event)
+<p>Adds an event to the registry, and attaches it to an event emitter.</p>
+
+**Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
+**Overrides**: [<code>add</code>](#BaseRegistry+add)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| base | [<code>Event</code>](#Event) | <p>The event to load</p> |
+
+<a name="BaseRegistry+registerCoreDirectory"></a>
+
+### eventRegistry.registerCoreDirectory(directory) ⇒ <code>this</code>
+<p>Registers a core directory.</p>
+
+**Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
+**Overrides**: [<code>registerCoreDirectory</code>](#BaseRegistry+registerCoreDirectory)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| directory | <code>string</code> | <p>The directory to register</p> |
+
+<a name="BaseRegistry+loadAll"></a>
+
+### eventRegistry.loadAll() ⇒ <code>Promise.&lt;number&gt;</code>
+<p>Loads all the bases found in the core directories.</p>
+
+**Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
+**Overrides**: [<code>loadAll</code>](#BaseRegistry+loadAll)  
 <a name="Base"></a>
 
 ## *Base*
@@ -231,6 +464,7 @@
     * *[.enabled](#Base+enabled) : <code>boolean</code>*
     * *[.enable()](#Base+enable) ⇒ [<code>Base</code>](#Base)*
     * *[.disable()](#Base+disable) ⇒ [<code>Base</code>](#Base)*
+    * *[.unload()](#Base+unload) ⇒ <code>void</code>*
 
 <a name="new_Base_new"></a>
 
@@ -293,6 +527,112 @@
 **Kind**: instance method of [<code>Base</code>](#Base)  
 **Chainable**  
 **Emits**: [<code>baseDisabled</code>](#InlustrisClient+event_baseDisabled)  
+<a name="Base+unload"></a>
+
+### *base.unload() ⇒ <code>void</code>*
+<p>Unloads the base, and deletes it from the registry.</p>
+
+**Kind**: instance method of [<code>Base</code>](#Base)  
+**Emits**: [<code>baseUnloaded</code>](#InlustrisClient+event_baseUnloaded)  
+<a name="Event"></a>
+
+## Event ⇐ [<code>Base</code>](#Base)
+<p>The event class for creating events.</p>
+
+**Kind**: global class  
+**Extends**: [<code>Base</code>](#Base)  
+
+* [Event](#Event) ⇐ [<code>Base</code>](#Base)
+    * [.event](#Event+event) : <code>string</code>
+    * [.once](#Event+once) : <code>boolean</code>
+    * [.client](#Base+client) : [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.options](#Base+options) : [<code>BaseOptions</code>](#BaseOptions)
+    * [.registry](#Base+registry) : <code>BaseStore</code>
+    * [.id](#Base+id) : <code>string</code>
+    * [.enabled](#Base+enabled) : <code>boolean</code>
+    * [.enable()](#Event+enable) ⇒ [<code>Event</code>](#Event)
+    * [.disable()](#Event+disable) ⇒ [<code>Event</code>](#Event)
+    * [.unload()](#Base+unload) ⇒ <code>void</code>
+
+<a name="Event+event"></a>
+
+### event.event : <code>string</code>
+<p>The event this base listens to</p>
+
+**Kind**: instance property of [<code>Event</code>](#Event)  
+**Read only**: true  
+<a name="Event+once"></a>
+
+### event.once : <code>boolean</code>
+<p>Whether this event is emitted once or not</p>
+
+**Kind**: instance property of [<code>Event</code>](#Event)  
+**Read only**: true  
+<a name="Base+client"></a>
+
+### event.client : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client that initialized this base</p>
+
+**Kind**: instance property of [<code>Event</code>](#Event)  
+**Overrides**: [<code>client</code>](#Base+client)  
+**Read only**: true  
+<a name="Base+options"></a>
+
+### event.options : [<code>BaseOptions</code>](#BaseOptions)
+<p>The options for this base</p>
+
+**Kind**: instance property of [<code>Event</code>](#Event)  
+**Overrides**: [<code>options</code>](#Base+options)  
+**Read only**: true  
+<a name="Base+registry"></a>
+
+### event.registry : <code>BaseStore</code>
+<p>The Registry that holds this base</p>
+
+**Kind**: instance property of [<code>Event</code>](#Event)  
+**Overrides**: [<code>registry</code>](#Base+registry)  
+**Read only**: true  
+<a name="Base+id"></a>
+
+### event.id : <code>string</code>
+<p>The ID of this base</p>
+
+**Kind**: instance property of [<code>Event</code>](#Event)  
+**Overrides**: [<code>id</code>](#Base+id)  
+**Read only**: true  
+<a name="Base+enabled"></a>
+
+### event.enabled : <code>boolean</code>
+<p>Whether this base is enabled</p>
+
+**Kind**: instance property of [<code>Event</code>](#Event)  
+**Overrides**: [<code>enabled</code>](#Base+enabled)  
+<a name="Event+enable"></a>
+
+### event.enable() ⇒ [<code>Event</code>](#Event)
+<p>Enables the event, and adds the listener to the event emitter.</p>
+
+**Kind**: instance method of [<code>Event</code>](#Event)  
+**Chainable**  
+**Overrides**: [<code>enable</code>](#Base+enable)  
+**Emits**: [<code>baseEnabled</code>](#InlustrisClient+event_baseEnabled)  
+<a name="Event+disable"></a>
+
+### event.disable() ⇒ [<code>Event</code>](#Event)
+<p>Disables the event, and removes the listener from the event emitter.</p>
+
+**Kind**: instance method of [<code>Event</code>](#Event)  
+**Chainable**  
+**Overrides**: [<code>disable</code>](#Base+disable)  
+**Emits**: [<code>baseDisabled</code>](#InlustrisClient+event_baseDisabled)  
+<a name="Base+unload"></a>
+
+### event.unload() ⇒ <code>void</code>
+<p>Unloads the base, and deletes it from the registry.</p>
+
+**Kind**: instance method of [<code>Event</code>](#Event)  
+**Overrides**: [<code>unload</code>](#Base+unload)  
+**Emits**: [<code>baseUnloaded</code>](#InlustrisClient+event_baseUnloaded)  
 <a name="ClientUtil"></a>
 
 ## ClientUtil
@@ -1070,11 +1410,10 @@ The sort is not necessarily stable. The default sort order is according to strin
 
 <a name="_Symbol$species"></a>
 
-## *\_Symbol$species ⇐ [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)*
+## *\_Symbol$species*
 <p>The base registry for all stores to extend.</p>
 
 **Kind**: global abstract variable  
-**Extends**: [<code>Collection</code>](https://discord.js.org/#/docs/main/master/class/Collection)  
 <a name="InlustrisPlugin"></a>
 
 ## InlustrisPlugin : <code>Object</code>

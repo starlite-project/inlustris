@@ -4,6 +4,10 @@ import { EventOptions } from '../interfaces/EventOptions';
 import { EventEmitter } from 'events';
 import { EventRegistry } from '../registries/EventRegistry';
 
+/**
+ * The event class for creating events.
+ * @extends {Base}
+ */
 export abstract class Event extends Base {
     public readonly options: EventOptions;
     public readonly registry: EventRegistry;
@@ -28,11 +32,23 @@ export abstract class Event extends Base {
         return (typeof this.options.emitter === 'string' ? this.client[this.options.emitter] : this.options.emitter) || this.client;
     }
 
+    /**
+     * Enables the event, and adds the listener to the event emitter.
+     * @returns {Event}
+     * @chainable
+     * @emits InlustrisClient#baseEnabled
+     */
     public enable(): this {
         this._listen();
         return super.enable();
     }
 
+    /**
+     * Disables the event, and removes the listener from the event emitter.
+     * @returns {Event}
+     * @chainable
+     * @emits InlustrisClient#baseDisabled
+     */
     public disable(): this {
         this._unlisten();
         return super.disable();
@@ -55,6 +71,12 @@ export abstract class Event extends Base {
      */
     public abstract run(...args: any[]): any;
 
+    /**
+     * The private method to bind to an event emitter.
+     * @param {...any} [args] Args emitted to the event
+     * @returns {void}
+     * @private
+     */
     private async _run(...args: any[]): Promise<void> {
         try {
             await this.run(...args);
@@ -63,16 +85,33 @@ export abstract class Event extends Base {
         }
     }
 
+    /**
+     * 
+     * The private method to bind to an event emitter, for use once.
+     * @param {...any} [args] Args emitted to the event
+     * @returns {void}
+     * @private
+     */
     private async _runOnce(...args: any[]): Promise<void> {
         await this._run(...args);
         this.registry._onceEvents.add(this.event);
         return this.unload();
     }
 
+    /**
+     * Attaches the event to an event emitter.
+     * @returns {void}
+     * @private
+     */
     public _listen(): void {
         this.emitter[this.once ? 'once' : 'on'](this.event, this._listener);
     }
 
+    /**
+     * Unlistens to an event, removing the listener from the EventEmitter
+     * @returns {void}
+     * @private
+     */
     public _unlisten(): void {
         this.emitter.removeListener(this.event, this._listener);
     }

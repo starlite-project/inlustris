@@ -1,4 +1,4 @@
-import { Client, ClientApplication, User, UserResolvable, Collection, TextChannel, VoiceChannel, NewsChannel, StoreChannel, CategoryChannel, DMChannel } from 'discord.js';
+import { Client, ClientApplication, User, UserResolvable, Collection, TextChannel, VoiceChannel, NewsChannel, StoreChannel, CategoryChannel, DMChannel, GuildMember } from 'discord.js';
 import { dirname, join } from 'path';
 import { InlustrisOptions } from './interfaces/InlustrisOptions';
 import { InlustrisPlugin } from './interfaces/InlustrisPlugin';
@@ -160,6 +160,17 @@ export class InlustrisClient extends Client {
     }
 
     /**
+     * A collection of all the `Guild#me` instances, mapped by Guild ID
+     * @type {Collection<string, ?GuildMember>}
+     * @readonly
+     */
+    public get me(): Collection<string, GuildMember | null> {
+        const coll: Collection<string, GuildMember | null> = new Collection();
+        for (const guild of this.guilds.values()) coll.set(guild.id, guild.me);
+        return coll;
+    }
+
+    /**
      * Does the same as [Client#fetchApplication()](https://discord.js.org/#/docs/main/master/class/Client?scrollTo=fetchApplication) but attaches the resolved value to {@link InlustrisClient#application}
      * @returns {Promise<external:ClientApplication>}
      */
@@ -182,8 +193,7 @@ export class InlustrisClient extends Client {
      * @returns {Promise<string>}
      */
     public async start(): Promise<string> {
-        await this.events.loadAll();
-        for (const plugin of this._plugins) {
+        for (const plugin of this.plugins) {
             const resolved = this._resolvePlugin(plugin);
             if (typeof resolved === 'string') continue;
             await this._loadPlugin(resolved);
@@ -191,7 +201,7 @@ export class InlustrisClient extends Client {
         const coreDirectory = join(__dirname, '..', '/');
         for (const registry of this.registries.values()) registry.registerCoreDirectory(coreDirectory);
 
-        const loaded = await Promise.all(this.registries.map(async (registry): Promise<string> => `Loaded ${await registry.loadAll()} ${registry.name}`));
+        await Promise.all(this.registries.map(async (registry): Promise<string> => `Loaded ${await registry.loadAll()} ${registry.name}`));
 
         return super.login(this._token);
     }
@@ -304,5 +314,18 @@ export class InlustrisClient extends Client {
 /**
  * Emitted when a base is disabled.
  * @event InlustrisClient#baseDisabled
+ * @param {Base} base The base that was disabled
+ */
+
+/**
+ * Emitted when the client is ready. Should be listened to over `Client#ready`
+ * as Inlustris uses that internallly to initialize the client once Discord data
+ * is ready.
+ * @event InlustrisClient#clientReady
+ */
+
+/**
+ * Emitted when a base is unloaded.
+ * @event InlustrisClient#baseUnloaded
  * @param {Base} base The base that was disabled
  */

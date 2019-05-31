@@ -9,7 +9,6 @@ const { isClass } = Util;
 
 /**
  * The base registry for all stores to extend.
- * @extends {external:Collection}
  * @abstract
  */
 export abstract class BaseRegistry<V extends Base, VConstructor = typeof Base> extends Collection<string, V> {
@@ -17,6 +16,12 @@ export abstract class BaseRegistry<V extends Base, VConstructor = typeof Base> e
     public readonly client: InlustrisClient;
     public readonly name: string;
     private readonly coreDirectories: List<string>;
+    /**
+     * Creates a new BaseRegistry.
+     * @param {InlustrisClient} client The client
+     * @param {string} name The name of the registry
+     * @param {Function} holds The class that the registry will use to create instances
+     */
     public constructor(client: InlustrisClient, name: string, holds: VConstructor) {
         super();
 
