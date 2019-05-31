@@ -11,6 +11,7 @@ export default class extends Event {
     }
 
     public async run(): Promise<void> {
+        await this.client.fetchApplication();
         // Placeholder for now as I work on more features
         this.client.emit('clientReady');
     }

@@ -3,7 +3,7 @@
 const { Client } = require('../');
 
 new Client({
-    token: require('./config.json').token
+    token: require('./config.json').token,
+    plugins: ['defaults']
 })
-    .use('util')
     .start();

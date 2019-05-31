@@ -9,6 +9,6 @@ module.exports = class extends Event {
     }
 
     async run() {
-        console.log(this.client);
+        console.log(this.client.util);
     }
 }
