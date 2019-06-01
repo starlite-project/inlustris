@@ -1,6 +1,8 @@
 ## Classes
 
 <dl>
+<dt><a href="#Flag">Flag</a></dt>
+<dd><p>Represents a special return value during command execution or argument parsing.</p></dd>
 <dt><a href="#InlustrisClient">InlustrisClient</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Client">Client</a></code></dt>
 <dd><p>The base client for Inlustris.</p></dd>
 <dt><a href="#BaseRegistry">BaseRegistry</a></dt>
@@ -12,6 +14,8 @@
 Only applied if <code>settings</code>, <code>internals</code>, or <code>defaults</code> is a loaded plugin.</p></dd>
 <dt><a href="#Base">Base</a></dt>
 <dd><p>The base class for all pieces.</p></dd>
+<dt><a href="#Command">Command</a> ⇐ <code><a href="#Base">Base</a></code></dt>
+<dd><p>Command class for creating commands.</p></dd>
 <dt><a href="#Event">Event</a> ⇐ <code><a href="#Base">Base</a></code></dt>
 <dd><p>The event class for creating events.</p></dd>
 <dt><a href="#ClientUtil">ClientUtil</a></dt>
@@ -49,6 +53,12 @@ will load all of them.</p>
 <dd><p>The base options for a module</p></dd>
 </dl>
 
+<a name="Flag"></a>
+
+## Flag
+<p>Represents a special return value during command execution or argument parsing.</p>
+
+**Kind**: global class  
 <a name="InlustrisClient"></a>
 
 ## InlustrisClient ⇐ [<code>Client</code>](https://discord.js.org/#/docs/main/master/class/Client)
@@ -657,6 +667,96 @@ Only applied if <code>settings</code>, <code>internals</code>, or <code>defaults
 <p>Unloads the base, and deletes it from the registry.</p>
 
 **Kind**: instance method of [<code>Base</code>](#Base)  
+**Emits**: [<code>baseUnloaded</code>](#InlustrisClient+event_baseUnloaded)  
+<a name="Command"></a>
+
+## Command ⇐ [<code>Base</code>](#Base)
+<p>Command class for creating commands.</p>
+
+**Kind**: global class  
+**Extends**: [<code>Base</code>](#Base)  
+
+* [Command](#Command) ⇐ [<code>Base</code>](#Base)
+    * [.client](#Base+client) : [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.options](#Base+options) : [<code>BaseOptions</code>](#BaseOptions)
+    * [.registry](#Base+registry) : <code>BaseStore</code>
+    * [.id](#Base+id) : <code>string</code>
+    * [.enabled](#Base+enabled) : <code>boolean</code>
+    * *[.args()](#Command+args)*
+    * [.enable()](#Base+enable) ⇒ [<code>Base</code>](#Base)
+    * [.disable()](#Base+disable) ⇒ [<code>Base</code>](#Base)
+    * [.unload()](#Base+unload) ⇒ <code>void</code>
+
+<a name="Base+client"></a>
+
+### command.client : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client that initialized this base</p>
+
+**Kind**: instance property of [<code>Command</code>](#Command)  
+**Overrides**: [<code>client</code>](#Base+client)  
+**Read only**: true  
+<a name="Base+options"></a>
+
+### command.options : [<code>BaseOptions</code>](#BaseOptions)
+<p>The options for this base</p>
+
+**Kind**: instance property of [<code>Command</code>](#Command)  
+**Overrides**: [<code>options</code>](#Base+options)  
+**Read only**: true  
+<a name="Base+registry"></a>
+
+### command.registry : <code>BaseStore</code>
+<p>The Registry that holds this base</p>
+
+**Kind**: instance property of [<code>Command</code>](#Command)  
+**Overrides**: [<code>registry</code>](#Base+registry)  
+**Read only**: true  
+<a name="Base+id"></a>
+
+### command.id : <code>string</code>
+<p>The ID of this base</p>
+
+**Kind**: instance property of [<code>Command</code>](#Command)  
+**Overrides**: [<code>id</code>](#Base+id)  
+**Read only**: true  
+<a name="Base+enabled"></a>
+
+### command.enabled : <code>boolean</code>
+<p>Whether this base is enabled</p>
+
+**Kind**: instance property of [<code>Command</code>](#Command)  
+**Overrides**: [<code>enabled</code>](#Base+enabled)  
+<a name="Command+args"></a>
+
+### *command.args()*
+<p>Abstract argument generator, needs to be used if arguments are needed with commands.</p>
+
+**Kind**: instance abstract method of [<code>Command</code>](#Command)  
+<a name="Base+enable"></a>
+
+### command.enable() ⇒ [<code>Base</code>](#Base)
+<p>Enables the base. Shortcut for <code>&lt;base&gt;.enabled = true</code>.</p>
+
+**Kind**: instance method of [<code>Command</code>](#Command)  
+**Chainable**  
+**Overrides**: [<code>enable</code>](#Base+enable)  
+**Emits**: [<code>baseEnabled</code>](#InlustrisClient+event_baseEnabled)  
+<a name="Base+disable"></a>
+
+### command.disable() ⇒ [<code>Base</code>](#Base)
+<p>Disables the base. Shortcut for <code>&lt;base&gt;.enabled = false</code>.</p>
+
+**Kind**: instance method of [<code>Command</code>](#Command)  
+**Chainable**  
+**Overrides**: [<code>disable</code>](#Base+disable)  
+**Emits**: [<code>baseDisabled</code>](#InlustrisClient+event_baseDisabled)  
+<a name="Base+unload"></a>
+
+### command.unload() ⇒ <code>void</code>
+<p>Unloads the base, and deletes it from the registry.</p>
+
+**Kind**: instance method of [<code>Command</code>](#Command)  
+**Overrides**: [<code>unload</code>](#Base+unload)  
 **Emits**: [<code>baseUnloaded</code>](#InlustrisClient+event_baseUnloaded)  
 <a name="Event"></a>
 

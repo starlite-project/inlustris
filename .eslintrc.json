@@ -18,7 +18,7 @@
         ],
         "no-unused-vars": "off",
         "semi": "off",
-        "@typescript-eslint/semi": ["error"],
+        "@typescript-eslint/semi": 2,
         "indent": "off",
         "@typescript-eslint/indent": [
             "error",
