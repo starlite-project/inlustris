@@ -39,7 +39,7 @@ steps:
 
       yarn run build
 
-      mv dist out/dist
+      mv dist out/lib
 
       cd out
       git add --all .
