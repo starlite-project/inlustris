@@ -1,0 +1,48 @@
+variables:
+  type: 'Build'
+  versionSpec: '10.x'
+  ghRef: 'github.com/starlight-ts/inlustris'
+
+trigger:
+  branches:
+    include:
+      - master
+    exclude:
+      - build
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(versionSpec)
+    displayName: 'Install Node'
+  - script: yarn
+    displayName: 'Install Dependencies'
+  - script: yarn lint
+    displayName: 'Test Lint'
+  - bash: |
+      if [[ "$BRANCH" != "master" ]]; then
+        echo -e "Not building for a non branch push - building without deploying"
+        yarn docs
+        exit 0
+      fi
+      echo -e "Building for a branch push - building and deploying"
+      git clone $(git config remote.origin.url) out -b $TARGET_BRANCH
+      yarn docs
+      mv docs.md out/docs.md
+      cd out
+      git add --all .
+      git config user.name "Azure Pipelines"
+      git config user.email "${COMMIT_EMAIL}"
+      git commit -m "$TYPE build: $(git rev-parse --verify HEAD)"
+      git push "https://${GH_TOKEN}@${GH_REF}" $TARGET_BRANCH
+    env:
+      GH_TOKEN: $(ghToken)
+      COMMIT_EMAIL: $(commitEmail)
+      TYPE: $(type)
+      GH_REF: $(ghRef)
+      BRANCH: $(Build.SourceBranchName)
+      TARGET_BRANCH: $(targetBranch)
+    displayName: Build $(type)
