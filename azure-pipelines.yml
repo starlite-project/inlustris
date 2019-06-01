@@ -31,7 +31,7 @@ steps:
       echo -e "Building for a branch push - building and deploying"
       git clone $(git config remote.origin.url) out -b $TARGET_BRANCH
       yarn docs
-      mv docs.md out/docs.md
+      mv docs/docs.md out/docs/docs.md
       cd out
       git add --all .
       git config user.name "Azure Pipelines"
