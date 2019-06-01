@@ -2,6 +2,7 @@ variables:
   type: 'Docs'
   versionSpec: '10.x'
   ghRef: 'github.com/starlight-ts/inlustris'
+  targetBranch: 'master'
 
 trigger:
   branches:
