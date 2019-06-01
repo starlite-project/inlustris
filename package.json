@@ -3,15 +3,15 @@
     "version": "0.0.1",
     "author": "Gryffon Bellish <owenbellish@gmail.com>",
     "license": "MIT",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts",
     "scripts": {
         "build": "tsc",
         "postbuild": "npm run docs",
         "prebuild": "npm run lint:fix",
         "lint:fix": "npx eslint src --ext .ts --fix",
         "lint": "npx eslint src --ext .ts",
-        "clean": "rimraf dist/ .cache/",
+        "clean": "rimraf lib/ .cache/",
         "test": "node ./test/test.js",
         "docs": "jsdoc2md --no-cache --files ./src/**/*.ts --configure ./jsdoc2md.json > ./docs/docs.md"
     },
