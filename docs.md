@@ -1,12 +1,12 @@
 ## Classes
 
 <dl>
-<dt><a href="#Flag">Flag</a></dt>
-<dd><p>Represents a special return value during command execution or argument parsing.</p></dd>
 <dt><a href="#InlustrisClient">InlustrisClient</a> ⇐ <code><a href="https://discord.js.org/#/docs/main/master/class/Client">Client</a></code></dt>
 <dd><p>The base client for Inlustris.</p></dd>
 <dt><a href="#BaseRegistry">BaseRegistry</a></dt>
 <dd></dd>
+<dt><a href="#CommandRegistry">CommandRegistry</a> ⇐ <code><a href="#BaseRegistry">BaseRegistry</a></code></dt>
+<dd><p>The registry for holding and loading commands.</p></dd>
 <dt><a href="#EventRegistry">EventRegistry</a> ⇐ <code><a href="#BaseRegistry">BaseRegistry</a></code></dt>
 <dd><p>The event registry for loading events</p></dd>
 <dt><a href="#ClientCacheManager">ClientCacheManager</a></dt>
@@ -53,12 +53,6 @@ will load all of them.</p>
 <dd><p>The base options for a module</p></dd>
 </dl>
 
-<a name="Flag"></a>
-
-## Flag
-<p>Represents a special return value during command execution or argument parsing.</p>
-
-**Kind**: global class  
 <a name="InlustrisClient"></a>
 
 ## InlustrisClient ⇐ [<code>Client</code>](https://discord.js.org/#/docs/main/master/class/Client)
@@ -371,6 +365,133 @@ is ready.</p>
 | Param | Type | Description |
 | --- | --- | --- |
 | base | [<code>Base</code>](#Base) | <p>The base to be added</p> |
+
+<a name="CommandRegistry"></a>
+
+## CommandRegistry ⇐ [<code>BaseRegistry</code>](#BaseRegistry)
+<p>The registry for holding and loading commands.</p>
+
+**Kind**: global class  
+**Extends**: [<code>BaseRegistry</code>](#BaseRegistry)  
+
+* [CommandRegistry](#CommandRegistry) ⇐ [<code>BaseRegistry</code>](#BaseRegistry)
+    * [.holds](#BaseRegistry+holds) : [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.name](#BaseRegistry+name) : <code>string</code>
+    * [.userDirectory](#BaseRegistry+userDirectory) : <code>string</code>
+    * [.add(base)](#CommandRegistry+add) ⇒ [<code>Command</code>](#Command)
+    * [.get(key)](#CommandRegistry+get) ⇒ [<code>Command</code>](#Command)
+    * [.has(name)](#CommandRegistry+has) ⇒ <code>boolean</code>
+    * [.delete(key)](#CommandRegistry+delete) ⇒ <code>boolean</code>
+    * [.clear()](#CommandRegistry+clear) ⇒ <code>void</code>
+    * [.registerCoreDirectory(directory)](#BaseRegistry+registerCoreDirectory) ⇒ <code>this</code>
+    * [.loadAll()](#BaseRegistry+loadAll) ⇒ <code>Promise.&lt;number&gt;</code>
+    * [.load(directory, file)](#BaseRegistry+load) ⇒ [<code>Base</code>](#Base)
+
+<a name="BaseRegistry+holds"></a>
+
+### commandRegistry.holds : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client that this Registry is for</p>
+
+**Kind**: instance property of [<code>CommandRegistry</code>](#CommandRegistry)  
+**Overrides**: [<code>holds</code>](#BaseRegistry+holds)  
+**Read only**: true  
+<a name="BaseRegistry+name"></a>
+
+### commandRegistry.name : <code>string</code>
+<p>The name of the Registry</p>
+
+**Kind**: instance property of [<code>CommandRegistry</code>](#CommandRegistry)  
+**Overrides**: [<code>name</code>](#BaseRegistry+name)  
+**Read only**: true  
+<a name="BaseRegistry+userDirectory"></a>
+
+### commandRegistry.userDirectory : <code>string</code>
+<p>The directory where the bases are found</p>
+
+**Kind**: instance property of [<code>CommandRegistry</code>](#CommandRegistry)  
+**Overrides**: [<code>userDirectory</code>](#BaseRegistry+userDirectory)  
+<a name="CommandRegistry+add"></a>
+
+### commandRegistry.add(base) ⇒ [<code>Command</code>](#Command)
+<p>Adds a Command to the registry, and it's aliases.</p>
+
+**Kind**: instance method of [<code>CommandRegistry</code>](#CommandRegistry)  
+**Overrides**: [<code>add</code>](#BaseRegistry+add)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| base | [<code>Command</code>](#Command) | <p>The command to add</p> |
+
+<a name="CommandRegistry+get"></a>
+
+### commandRegistry.get(key) ⇒ [<code>Command</code>](#Command)
+<p>Gets a command by ID or an alias.</p>
+
+**Kind**: instance method of [<code>CommandRegistry</code>](#CommandRegistry)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | <p>The command ID or alias</p> |
+
+<a name="CommandRegistry+has"></a>
+
+### commandRegistry.has(name) ⇒ <code>boolean</code>
+<p>Whether or not an ID or alias is in the command registry.</p>
+
+**Kind**: instance method of [<code>CommandRegistry</code>](#CommandRegistry)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | <p>The ID or an alias of the command</p> |
+
+<a name="CommandRegistry+delete"></a>
+
+### commandRegistry.delete(key) ⇒ <code>boolean</code>
+<p>Deletes a command from the registry, and clears it's aliases.</p>
+
+**Kind**: instance method of [<code>CommandRegistry</code>](#CommandRegistry)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | <p>The ID or an alias of the command</p> |
+
+<a name="CommandRegistry+clear"></a>
+
+### commandRegistry.clear() ⇒ <code>void</code>
+<p>Clears the registry and the aliases.</p>
+
+**Kind**: instance method of [<code>CommandRegistry</code>](#CommandRegistry)  
+<a name="BaseRegistry+registerCoreDirectory"></a>
+
+### commandRegistry.registerCoreDirectory(directory) ⇒ <code>this</code>
+<p>Registers a core directory.</p>
+
+**Kind**: instance method of [<code>CommandRegistry</code>](#CommandRegistry)  
+**Overrides**: [<code>registerCoreDirectory</code>](#BaseRegistry+registerCoreDirectory)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| directory | <code>string</code> | <p>The directory to register</p> |
+
+<a name="BaseRegistry+loadAll"></a>
+
+### commandRegistry.loadAll() ⇒ <code>Promise.&lt;number&gt;</code>
+<p>Loads all the bases found in the core directories.</p>
+
+**Kind**: instance method of [<code>CommandRegistry</code>](#CommandRegistry)  
+**Overrides**: [<code>loadAll</code>](#BaseRegistry+loadAll)  
+<a name="BaseRegistry+load"></a>
+
+### commandRegistry.load(directory, file) ⇒ [<code>Base</code>](#Base)
+<p>Loads a base into the registry.</p>
+
+**Kind**: instance method of [<code>CommandRegistry</code>](#CommandRegistry)  
+**Overrides**: [<code>load</code>](#BaseRegistry+load)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| directory | <code>string</code> | <p>The directory of the base</p> |
+| file | <code>Array.&lt;string&gt;</code> | <p>The file location of the base</p> |
 
 <a name="EventRegistry"></a>
 
@@ -1566,6 +1687,8 @@ The sort is not necessarily stable. The default sort order is according to strin
     * [.deepClone(source)](#Util.deepClone) ⇒ <code>\*</code>
     * [.mergeDefault(def, given)](#Util.mergeDefault) ⇒ <code>Object</code>
     * [.isClass(inp)](#Util.isClass) ⇒ <code>boolean</code>
+    * [.isThenable(input)](#Util.isThenable) ⇒ <code>boolean</code>
+    * [.isFunction(input)](#Util.isFunction) ⇒ <code>boolean</code>
 
 <a name="new_Util_new"></a>
 
@@ -1631,6 +1754,28 @@ The sort is not necessarily stable. The default sort order is according to strin
 | Param | Type | Description |
 | --- | --- | --- |
 | inp | <code>function</code> | <p>The input to check</p> |
+
+<a name="Util.isThenable"></a>
+
+### Util.isThenable(input) ⇒ <code>boolean</code>
+<p>Checks if a given input is a Promise.</p>
+
+**Kind**: static method of [<code>Util</code>](#Util)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| input | <code>Promise</code> | <p>The input to check</p> |
+
+<a name="Util.isFunction"></a>
+
+### Util.isFunction(input) ⇒ <code>boolean</code>
+<p>Checks if the given input is a Function.</p>
+
+**Kind**: static method of [<code>Util</code>](#Util)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| input | <code>function</code> | <p>The input to check</p> |
 
 <a name="_Symbol$species"></a>
 

@@ -105,4 +105,24 @@ export class Util {
             typeof inp.prototype === 'object' &&
             inp.toString().substring(0, 5) === 'class';
     }
+
+    /**
+     * Checks if a given input is a Promise.
+     * @param {Promise} input The input to check
+     * @returns {boolean}
+     */
+    public static isThenable(input: any): boolean {
+        if (!input) return false;
+        return (input instanceof Promise) ||
+            (input !== Promise.prototype && Util.isFunction(input.then) && Util.isFunction(input.catch));
+    }
+
+    /**
+     * Checks if the given input is a Function.
+     * @param {Function} input The input to check
+     * @returns {boolean}
+     */
+    public static isFunction(input: any): input is Function {
+        return typeof input === 'function';
+    }
 }
