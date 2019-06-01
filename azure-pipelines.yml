@@ -1,8 +1,8 @@
 variables:
-  type: 'Docs'
+  type: 'Transpile'
   versionSpec: '10.x'
   ghRef: 'github.com/starlight-ts/inlustris'
-  targetBranch: 'master'
+  targetBranch: 'build'
 
 trigger:
   branches:
@@ -24,20 +24,28 @@ steps:
   - script: yarn lint
     displayName: 'Test Lint'
   - bash: |
-      if [[ "$BRANCH" != "master" ]]; then
-        echo -e "Not building for a non branch push - building without deploying"
-        yarn docs
+      set -e
+
+      if [["$BRANCH" != "master" ]]; then
+        echo -e "Not building for a non branch push - skipping"
         exit 0
       fi
+
       echo -e "Building for a branch push - building and deploying"
-      git clone $(git config remote.origin.url) out -b $TARGET_BRANCH
-      yarn docs
-      mv docs/docs.md out/docs/docs.md
+      REPO=$(git config remote.origin.url)
+      SHA=$(git rev-parse --verify HEAD)
+
+      git clone $REPO out -b $TARGET_BRANCH
+
+      yarn run build
+
+      mv dist out/dist
+
       cd out
       git add --all .
       git config user.name "Azure Pipelines"
       git config user.email "${COMMIT_EMAIL}"
-      git commit -m "$TYPE build: $(git rev-parse --verify HEAD)"
+      git commit -m "${TYPE} build: ${SHA}" || true
       git push "https://${GH_TOKEN}@${GH_REF}" $TARGET_BRANCH
     env:
       GH_TOKEN: $(ghToken)
