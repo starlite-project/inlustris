@@ -11,7 +11,7 @@
         "prebuild": "npm run lint:fix",
         "lint:fix": "npx eslint src --ext .ts --fix",
         "lint": "npx eslint src --ext .ts",
-        "clean": "rimraf lib/ .cache/",
+        "clean": "rimraf dist/ .cache/",
         "test": "node ./test/test.js",
         "docs": "jsdoc2md --no-cache --files ./src/**/*.ts --configure ./jsdoc2md.json > ./docs/docs.md"
     },

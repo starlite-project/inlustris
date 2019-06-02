@@ -21,6 +21,8 @@
 <dd><p>An error class used to make error throwing universal.</p></dd>
 <dt><a href="#List">List</a> ⇐ <code>Set</code></dt>
 <dd><p>A Set with additional utility methods.</p></dd>
+<dt><a href="#Type">Type</a></dt>
+<dd><p>The class for deep checking types.</p></dd>
 <dt><a href="#Util">Util</a></dt>
 <dd><p>Internal utility class.</p></dd>
 </dl>
@@ -1570,6 +1572,12 @@ The sort is not necessarily stable. The default sort order is according to strin
 | --- | --- | --- |
 | [compareFunction] | <code>function</code> | <p>Specifies a function that defines the sort order. If omitted, the list is sorted according to each character's Unicode point value, according to the string conversion of each element.</p> |
 
+<a name="Type"></a>
+
+## Type
+<p>The class for deep checking types.</p>
+
+**Kind**: global class  
 <a name="Util"></a>
 
 ## Util

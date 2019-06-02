@@ -62,7 +62,6 @@ typings/
 
 # build files
 dist/
-lib/
 
 # typescript cache
 .cache/
@@ -72,7 +71,3 @@ config.json
 
 # IDE files
 .vscode/
-
-# explicit ignores
-!Type.*
-!src/lib/storage
