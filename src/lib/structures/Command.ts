@@ -9,7 +9,9 @@ import { Base } from './Base';
  */
 export abstract class Command extends Base {
     public options: CommandOptions;
+
     public aliases: string[];
+
     public constructor(client: InlustrisClient, registry, options: CommandOptions) {
         super(client, registry, options);
         

@@ -13,9 +13,13 @@ const { isClass } = Util;
  */
 export abstract class BaseRegistry<V extends Base, VConstructor = typeof Base> extends Collection<string, V> {
     public readonly holds: VConstructor;
+
     public readonly client: InlustrisClient;
+
     public readonly name: string;
+
     private readonly coreDirectories: List<string>;
+
     /**
      * Creates a new BaseRegistry.
      * @param {InlustrisClient} client The client

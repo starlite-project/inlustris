@@ -12,6 +12,7 @@ const Messages = {
  */
 export class InlustrisError extends Error {
     private code: string;
+
     public constructor(key: string, ...args: string[]) {
         if (Messages[key] == null) throw new TypeError(`Error key '${key}' does not exist`);
         const message: string = typeof Messages[key] === 'function'

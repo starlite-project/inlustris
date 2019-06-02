@@ -4,7 +4,9 @@
  */
 export class List<V> extends Set<V> {
     private _array: V[] | null;
+
     public static readonly default: typeof List = List;
+
     public constructor(iterable?: readonly V[]) {
         super(iterable);
 
@@ -47,7 +49,9 @@ export class List<V> extends Set<V> {
      * amount is negative
      */
     public first(): V | undefined;
+
     public first(amount: number): V[];
+
     public first(amount?: number): V | V[] | undefined {
         if (typeof amount === 'undefined') return this.values().next().value;
         if (amount < 0) return this.last(amount * -1);
@@ -64,7 +68,9 @@ export class List<V> extends Set<V> {
      * amount is negative
      */
     public last(): V | undefined;
+
     public last(amount: number): V[];
+
     public last(amount?: number): V | V[] | undefined {
         const arr = this.array();
         if (typeof amount === 'undefined') return arr[arr.length - 1];
@@ -80,7 +86,9 @@ export class List<V> extends Set<V> {
      * @returns {*|Array<*>} A single value if no amount is provided or an array of values
      */
     public random(): V;
+
     public random(amount: number): V[];
+
     public random(amount?: number): V | V[] | undefined {
         let arr = this.array();
         if (typeof amount === 'undefined') return arr[Math.floor(Math.random() * arr.length)];

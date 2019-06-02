@@ -10,7 +10,9 @@ import { Base } from './Base';
  */
 export abstract class Event extends Base {
     public readonly options: EventOptions;
+
     public readonly registry: EventRegistry;
+
     public constructor(client: InlustrisClient, registry: EventRegistry, options: EventOptions) {
         super(client, registry, options);
 

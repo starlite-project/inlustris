@@ -19,16 +19,27 @@ import { ClientCacheManager } from './storage/ClientCacheManager';
  */
 export class InlustrisClient extends Client {
     public cache: ClientCacheManager | null;
+
     public readonly events: EventRegistry;
+
     public loaded: boolean;
+
     public options: InlustrisOptions;
+
     public util: ClientUtil | null;
+
     public application: ClientApplication | null;
+
     public userBaseDirectory: string;
+
     private registries: List<BaseRegistry<Base, typeof Base>>;
+
     private _plugins: List<string>;
+
     private _token: string;
+
     [K: string]: any;
+
     /**
      * Creates a new client.
      * @param {InlustrisOptions} [options={}] Options to use when loading the client.

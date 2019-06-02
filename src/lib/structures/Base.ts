@@ -8,8 +8,11 @@ import { BaseRegistry } from '../registries/BaseRegistry';
  */
 export abstract class Base {
     public readonly client: InlustrisClient;
+
     public readonly options: BaseOptions;
+
     public readonly registry: BaseRegistry<Base, typeof Base>;
+
     /**
      * Initializes a new Base.
      * @param {InlustrisClient} client The Client for the Base

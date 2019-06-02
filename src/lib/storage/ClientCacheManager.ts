@@ -9,8 +9,11 @@ import { List } from '../util/List';
  */
 export class ClientCacheManager {
     public readonly client: InlustrisClient;
+
     private _cache: Collection<string, any>;
+
     private _keys: List<string>;
+
     /** @param {InlustrisClient} client */
     public constructor(client: InlustrisClient) {
         /**

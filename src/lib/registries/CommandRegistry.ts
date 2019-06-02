@@ -9,6 +9,7 @@ import { BaseRegistry } from './BaseRegistry';
  */
 export class CommandRegistry extends BaseRegistry<Command, typeof Command> {
     public aliases: Collection<string, Command>;
+
     public constructor(client: InlustrisClient) {
         super(client, 'commands', Command);
 
