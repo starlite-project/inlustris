@@ -31,8 +31,15 @@
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-non-null-assertion": 0,
         "@typescript-eslint/no-parameter-properties": 0,
-        "no-dupe-class-members":"off",
-        "object-curly-spacing": ["error", "always"],
-        "@typescript-eslint/no-inferrable-types": 0
+        "no-dupe-class-members": "off",
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "@typescript-eslint/no-inferrable-types": 0,
+        "eol-last": [
+            "error",
+            "always"
+        ]
     }
 }
