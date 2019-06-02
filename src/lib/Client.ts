@@ -18,16 +18,17 @@ import { ClientCacheManager } from './storage/ClientCacheManager';
  * @extends {external:Client}
  */
 export class InlustrisClient extends Client {
+    public cache: ClientCacheManager | null;
+    public readonly events: EventRegistry;
+    public loaded: boolean;
     public options: InlustrisOptions;
-    private _plugins: List<string>;
     public util: ClientUtil | null;
-    private _token: string;
-    [K: string]: any;
     public application: ClientApplication | null;
     public userBaseDirectory: string;
-    public readonly events: EventRegistry;
     private registries: List<BaseRegistry<Base, typeof Base>>;
-    public cache: ClientCacheManager | null;
+    private _plugins: List<string>;
+    private _token: string;
+    [K: string]: any;
     /**
      * Creates a new client.
      * @param {InlustrisOptions} [options={}] Options to use when loading the client.
@@ -88,6 +89,12 @@ export class InlustrisClient extends Client {
          */
         this.events = new EventRegistry(this);
         this.registries.add(this.events);
+
+        /**
+         * Whether the client has loaded all available plugins
+         * @type {boolean}
+         */
+        this.loaded = false;
     }
 
     /**
@@ -201,17 +208,29 @@ export class InlustrisClient extends Client {
      * @returns {Promise<string>}
      */
     public async start(): Promise<string> {
-        for (const plugin of this.plugins) {
-            const resolved = this._resolvePlugin(plugin);
-            if (typeof resolved === 'string') continue;
-            await this._loadPlugin(resolved);
-        }
+        await this.load();
         const coreDirectory = join(__dirname, '..', '/');
         for (const registry of this.registries.values()) registry.registerCoreDirectory(coreDirectory);
 
         await Promise.all(this.registries.map(async (registry): Promise<string> => `Loaded ${await registry.loadAll()} ${registry.name}`));
 
         return super.login(this._token);
+    }
+
+    /**
+     * Loads all the plugins called in the options or with `InlustrisClient#use`.
+     * @returns {Promise<List<string>>}
+     */
+    public async load(): Promise<List<string>> {
+        const plugs = new List<string>();
+        for (const plugin of this.plugins) {
+            plugs.add(plugin);
+            const resolved = this._resolvePlugin(plugin);
+            if (typeof resolved === 'string') continue;
+            await this._loadPlugin(resolved);
+        }
+        this.loaded = true;
+        return plugs;
     }
 
     /**
@@ -248,6 +267,7 @@ export class InlustrisClient extends Client {
      * @returns {InlustrisClient}
      */
     public use(mod: string): this {
+        if (this.loaded) throw new InlustrisError('ALREADY_LOADED');
         this.plugins.add(mod);
         return this;
     }

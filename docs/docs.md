@@ -67,6 +67,7 @@ will load all of them.</p>
     * [.cache](#InlustrisClient+cache) : [<code>ClientCacheManager</code>](#ClientCacheManager)
     * [.application](#InlustrisClient+application) : [<code>ClientApplication</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * [.events](#InlustrisClient+events) : [<code>EventRegistry</code>](#EventRegistry)
+    * [.loaded](#InlustrisClient+loaded) : <code>boolean</code>
     * [.owners](#InlustrisClient+owners) : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
     * [.plugins](#InlustrisClient+plugins) : <code>List.&lt;string&gt;</code>
     * [.text](#InlustrisClient+text) : <code>Collection.&lt;string, TextChannel&gt;</code>
@@ -79,6 +80,7 @@ will load all of them.</p>
     * [.fetchApplication()](#InlustrisClient+fetchApplication) ⇒ [<code>Promise.&lt;ClientApplication&gt;</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * ~~[.login()](#InlustrisClient+login)~~
     * [.start()](#InlustrisClient+start) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [.load()](#InlustrisClient+load) ⇒ <code>Promise.&lt;List.&lt;string&gt;&gt;</code>
     * [.use(mod)](#InlustrisClient+use) ⇒ [<code>InlustrisClient</code>](#InlustrisClient)
     * [.isOwner(user)](#InlustrisClient+isOwner) ⇒ <code>boolean</code>
     * ["baseEnabled" (base)](#InlustrisClient+event_baseEnabled)
@@ -121,6 +123,12 @@ will load all of them.</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
 **Read only**: true  
+<a name="InlustrisClient+loaded"></a>
+
+### inlustrisClient.loaded : <code>boolean</code>
+<p>Whether the client has loaded all available plugins</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
 <a name="InlustrisClient+owners"></a>
 
 ### inlustrisClient.owners : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
@@ -206,6 +214,12 @@ will load all of them.</p>
 
 ### inlustrisClient.start() ⇒ <code>Promise.&lt;string&gt;</code>
 <p>Loads and initializes the plugins, and logs the client in.</p>
+
+**Kind**: instance method of [<code>InlustrisClient</code>](#InlustrisClient)  
+<a name="InlustrisClient+load"></a>
+
+### inlustrisClient.load() ⇒ <code>Promise.&lt;List.&lt;string&gt;&gt;</code>
+<p>Loads all the plugins called in the options or with <code>InlustrisClient#use</code>.</p>
 
 **Kind**: instance method of [<code>InlustrisClient</code>](#InlustrisClient)  
 <a name="InlustrisClient+use"></a>
