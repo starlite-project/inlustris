@@ -9,9 +9,6 @@
 <dd><p>The registry for holding and loading commands.</p></dd>
 <dt><a href="#EventRegistry">EventRegistry</a> ⇐ <code><a href="#BaseRegistry">BaseRegistry</a></code></dt>
 <dd><p>The event registry for loading events</p></dd>
-<dt><a href="#ClientCacheManager">ClientCacheManager</a></dt>
-<dd><p>The cache manager for the client.
-Only applied if <code>settings</code>, <code>internals</code>, or <code>defaults</code> is a loaded plugin.</p></dd>
 <dt><a href="#Base">Base</a></dt>
 <dd><p>The base class for all pieces.</p></dd>
 <dt><a href="#Command">Command</a> ⇐ <code><a href="#Base">Base</a></code></dt>
@@ -64,7 +61,6 @@ will load all of them.</p>
 * [InlustrisClient](#InlustrisClient) ⇐ [<code>Client</code>](https://discord.js.org/#/docs/main/master/class/Client)
     * [new InlustrisClient([options])](#new_InlustrisClient_new)
     * [.util](#InlustrisClient+util) : [<code>ClientUtil</code>](#ClientUtil)
-    * [.cache](#InlustrisClient+cache) : [<code>ClientCacheManager</code>](#ClientCacheManager)
     * [.application](#InlustrisClient+application) : [<code>ClientApplication</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * [.events](#InlustrisClient+events) : [<code>EventRegistry</code>](#EventRegistry)
     * [.loaded](#InlustrisClient+loaded) : <code>boolean</code>
@@ -102,12 +98,6 @@ will load all of them.</p>
 
 ### inlustrisClient.util : [<code>ClientUtil</code>](#ClientUtil)
 <p>A [ClientUtil](#ClientUtil) to use, will only be loaded if <code>internals</code>, <code>defaults</code>, or <code>util</code> is specified in [InlustrisOptions#plugins](InlustrisOptions#plugins) or used with [use](#InlustrisClient+use)</p>
-
-**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
-<a name="InlustrisClient+cache"></a>
-
-### inlustrisClient.cache : [<code>ClientCacheManager</code>](#ClientCacheManager)
-<p>The cache manager, will only be loaded if <code>internals</code>, <code>defaults</code>, or <code>util</code> is specified as a plugin to load</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
 <a name="InlustrisClient+application"></a>
@@ -610,113 +600,6 @@ is ready.</p>
 
 **Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
 **Overrides**: [<code>loadAll</code>](#BaseRegistry+loadAll)  
-<a name="ClientCacheManager"></a>
-
-## ClientCacheManager
-<p>The cache manager for the client.
-Only applied if <code>settings</code>, <code>internals</code>, or <code>defaults</code> is a loaded plugin.</p>
-
-**Kind**: global class  
-
-* [ClientCacheManager](#ClientCacheManager)
-    * [new ClientCacheManager(client)](#new_ClientCacheManager_new)
-    * [.client](#ClientCacheManager+client) : [<code>InlustrisClient</code>](#InlustrisClient)
-    * [.cache](#ClientCacheManager+cache) : <code>Collection.&lt;string, any&gt;</code>
-    * [.keys()](#ClientCacheManager+keys)
-    * [.values()](#ClientCacheManager+values)
-    * [.set(key, val)](#ClientCacheManager+set) ⇒ [<code>ClientCacheManager</code>](#ClientCacheManager)
-    * [.has(key)](#ClientCacheManager+has) ⇒ <code>boolean</code>
-    * [.get(key, [defaultVal])](#ClientCacheManager+get) ⇒ <code>any</code>
-    * [.delete(key, [preserve])](#ClientCacheManager+delete) ⇒ <code>boolean</code>
-    * [._Symbol$iterator()](#ClientCacheManager+_Symbol$iterator)
-
-<a name="new_ClientCacheManager_new"></a>
-
-### new ClientCacheManager(client)
-
-| Param | Type |
-| --- | --- |
-| client | [<code>InlustrisClient</code>](#InlustrisClient) | 
-
-<a name="ClientCacheManager+client"></a>
-
-### clientCacheManager.client : [<code>InlustrisClient</code>](#InlustrisClient)
-<p>The client</p>
-
-**Kind**: instance property of [<code>ClientCacheManager</code>](#ClientCacheManager)  
-**Read only**: true  
-<a name="ClientCacheManager+cache"></a>
-
-### clientCacheManager.cache : <code>Collection.&lt;string, any&gt;</code>
-<p>The cache that is managed</p>
-
-**Kind**: instance property of [<code>ClientCacheManager</code>](#ClientCacheManager)  
-**Read only**: true  
-<a name="ClientCacheManager+keys"></a>
-
-### clientCacheManager.keys()
-<p>An iterable keys object.</p>
-
-**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
-<a name="ClientCacheManager+values"></a>
-
-### clientCacheManager.values()
-<p>An iterable values object.</p>
-
-**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
-<a name="ClientCacheManager+set"></a>
-
-### clientCacheManager.set(key, val) ⇒ [<code>ClientCacheManager</code>](#ClientCacheManager)
-<p>Sets a key and value.</p>
-
-**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | <p>A key to be added</p> |
-| val | <code>any</code> | <p>A value to be added</p> |
-
-<a name="ClientCacheManager+has"></a>
-
-### clientCacheManager.has(key) ⇒ <code>boolean</code>
-<p>Whether a key is located in the cache.</p>
-
-**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | <p>The key to check for</p> |
-
-<a name="ClientCacheManager+get"></a>
-
-### clientCacheManager.get(key, [defaultVal]) ⇒ <code>any</code>
-<p>Gets a value, and sets the default if the value isn't found.</p>
-
-**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | <p>The key to get</p> |
-| [defaultVal] | <code>any</code> | <p>The default value to set</p> |
-
-<a name="ClientCacheManager+delete"></a>
-
-### clientCacheManager.delete(key, [preserve]) ⇒ <code>boolean</code>
-<p>Deletes a key from the settings.</p>
-
-**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| key | <code>string</code> |  | <p>The key to delete</p> |
-| [preserve] | <code>boolean</code> | <code>true</code> | <p>Whether to preserve the key in the keys list</p> |
-
-<a name="ClientCacheManager+_Symbol$iterator"></a>
-
-### clientCacheManager.\_Symbol$iterator()
-<p>Yields the <code>ClientCacheManager#values</code> generator.</p>
-
-**Kind**: instance method of [<code>ClientCacheManager</code>](#ClientCacheManager)  
 <a name="Base"></a>
 
 ## *Base*

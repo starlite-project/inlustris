@@ -10,7 +10,6 @@ import { DefaultOptions } from './util/Constants';
 import { InlustrisError } from './util/InlustrisError';
 import { List } from './util/List';
 import { Util } from './util/Util';
-import { ClientCacheManager } from './storage/ClientCacheManager';
 
 
 /**
@@ -18,8 +17,6 @@ import { ClientCacheManager } from './storage/ClientCacheManager';
  * @extends {external:Client}
  */
 export class InlustrisClient extends Client {
-    public cache: ClientCacheManager | null;
-
     public readonly events: EventRegistry;
 
     public loaded: boolean;
@@ -66,12 +63,6 @@ export class InlustrisClient extends Client {
          * @type {?ClientUtil}
          */
         this.util = null;
-
-        /**
-         * The cache manager, will only be loaded if `internals`, `defaults`, or `util` is specified as a plugin to load
-         * @type {?ClientCacheManager}
-         */
-        this.cache = null;
 
         /**
          * The token to use to log in, used in the {@link InlustrisClient#start start} method
@@ -256,14 +247,9 @@ export class InlustrisClient extends Client {
                 this.util = new ClientUtil(this);
                 return plugin;
             }
-            case 'settings': {
-                this.cache = new ClientCacheManager(this);
-                return plugin;
-            }
             case 'internals':
             case 'defaults': {
                 this._resolvePlugin('util');
-                this._resolvePlugin('settings');
                 return plugin;
             }
             default: {
