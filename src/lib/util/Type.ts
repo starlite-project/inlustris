@@ -6,7 +6,7 @@ const { getPromiseDetails } = process.binding('util');
 /**
  * The class for deep checking types.
  */
-class Type {
+export class Type {
     public value: any;
 
     public is: string;
