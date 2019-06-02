@@ -1,7 +1,10 @@
 // Copyright (c) 2017-2019 Dirigeants. All rights reserved. MIT License.
 
-import { Constructable } from 'discord.js';
+import { Constructable, Guild, GuildResolvable, GuildMember, GuildChannel, Message } from 'discord.js';
 import { promisify } from 'util';
+import { InlustrisClient } from '../Client';
+
+const TOTITLECASE: RegExp = /[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g;
 
 export interface AnyObj {
     [K: string]: any;
@@ -11,6 +14,18 @@ export interface AnyObj {
  * Internal utility class.
  */
 export class Util {
+    /**
+     * Object with certain title case variants for words
+     * @type {Object<string, string>}
+     * @static
+     */
+    public static titleCaseVariants: { [s: string]: string } = {
+        textchannel: 'TextChannel',
+        voicechannel: 'VoiceChannel',
+        categorychannel: 'CategoryChannel',
+        guildmember: 'GuildMember'
+    };
+
     /**
      * This class may not be initialized with new
      * @throws {Error}
@@ -47,6 +62,51 @@ export class Util {
      */
     public static isPrimitive(inp: any): inp is string | boolean | bigint | number {
         return this.PRIMITIVE_TYPES.includes(typeof inp);
+    }
+
+    /**
+     * Converts a string to Title Case.
+     * @param {string} str The string to convert to title case
+     * @returns {string}
+     */
+    public static toTitleCase(str: string): string {
+        return str.replace(TOTITLECASE, (txt): string => Util.titleCaseVariants[txt] || txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+    }
+
+    /**
+     * Merges two objects.
+     * @param {*} objTarget The object to be merged
+     * @param {*} objSource The object to merge
+     * @returns {*}
+     */
+    // @ts-ignore
+    public static mergeObjects<T = Record<string, any>, S = Record<string, any>>(objTarget: T = {}, objSource: S): T & S {
+        // @ts-ignore
+        for (const key in objSource) objTarget[key] = Util.isObject(objSource[key]) ? Util.mergeObjects(objTarget[key], objSource[key]) : objSource[key];
+        return objTarget as T & S;
+    }
+
+    /**
+     * Turns a dotted path into a json object.
+     * @param {string} path The dotted path
+     * @param {*} value The value
+     * @param {Object<string, *>} [obj={}] The object to edit
+     * @returns {*}
+     */
+    public static makeObject<T = Record<string, any>, S = Record<string, any>>(path: string, value: any, obj: Record<string, any> = {}): T & S {
+        if (path.indexOf('.') === 1) {
+            obj[path] = value;
+        } else {
+            const route = path.split('.');
+            const lastKey = route.pop();
+            let reference = obj;
+            for (const key of route) {
+                if (!reference[key]) reference[key] = {};
+                reference = reference[key];
+            }
+            reference[lastKey!] = value;
+        }
+        return obj as T & S;
     }
 
     /**
@@ -124,5 +184,62 @@ export class Util {
      */
     public static isFunction(input: any): input is Function {
         return typeof input === 'function';
+    }
+
+    /**
+     * Convert an object to a tuple.
+     * @param {Object<string, *>} obj The object to convert
+     * @param {string} [prefix=''] The prefix for the key
+     * @returns {Array<Array<*>>}
+     */
+    public static objectToTuples(obj: Record<string, any>, prefix: string = ''): [string, any][] {
+        const entries: [string, any][] = [];
+        for (const [key, value] of Object.entries(obj)) {
+            if (Util.isObject(value)) {
+                entries.push(...Util.objectToTuples(value, `${prefix}${key}.`));
+            } else {
+                entries.push([`${prefix}${key}`, value]);
+            }
+        }
+
+        return entries;
+    }
+
+    /**
+     * Compares if both arrays are strictly equal.
+     * @param {any[]} arr1 The first array to compare
+     * @param {any[]} arr2 The second array to compare
+     * @returns {boolean}
+     */
+    public static arrayStrictEquals(arr1: any[], arr2: any[]): boolean {
+        if (arr1 === arr2) return true;
+        if (arr1.length !== arr2.length) return false;
+        for (let i = 0; i < arr1.length; i++) {
+            if (arr1[i] !== arr2[i]) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Resolves a guild.
+     * @param {InlustrisClient} client The client
+     * @param {GuildResolvable} guild A guild resolvable
+     * @returns {?Guild}
+     * @private
+     */
+    public static resolveGuild(client: InlustrisClient, guild: GuildResolvable): Guild | null {
+        const type = typeof guild;
+        if (type === 'object' && guild !== null) {
+            if (guild instanceof Guild) return guild;
+            // @ts-ignore
+            if ((guild instanceof GuildChannel) ||
+                // @ts-ignore
+                (guild instanceof GuildMember) ||
+                // @ts-ignore
+                (guild instanceof Message)) return guild.guild;
+        } else if (type === 'string' && /^\d{17,19}$/.test(guild as string)) {
+            return client.guilds.get(guild as string) || null;
+        }
+        return null;
     }
 }

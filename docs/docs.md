@@ -1578,6 +1578,54 @@ The sort is not necessarily stable. The default sort order is according to strin
 <p>The class for deep checking types.</p>
 
 **Kind**: global class  
+
+* [Type](#Type)
+    * [new Type(value, [parent])](#new_Type_new)
+    * _instance_
+        * [.value](#Type+value) : <code>\*</code>
+        * [.is](#Type+is) : <code>string</code>
+        * [.toString()](#Type+toString) ⇒ <code>string</code>
+    * _static_
+        * [.resolve(value)](#Type.resolve) ⇒ <code>string</code>
+
+<a name="new_Type_new"></a>
+
+### new Type(value, [parent])
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| value | <code>\*</code> |  | <p>The value to generate a deep Type for</p> |
+| [parent] | [<code>Type</code>](#Type) | <code></code> | <p>The parent value used in recursion</p> |
+
+<a name="Type+value"></a>
+
+### type.value : <code>\*</code>
+<p>The value to generate a deep Type of</p>
+
+**Kind**: instance property of [<code>Type</code>](#Type)  
+<a name="Type+is"></a>
+
+### type.is : <code>string</code>
+<p>The shallow type of this</p>
+
+**Kind**: instance property of [<code>Type</code>](#Type)  
+<a name="Type+toString"></a>
+
+### type.toString() ⇒ <code>string</code>
+<p>The full string type generated.</p>
+
+**Kind**: instance method of [<code>Type</code>](#Type)  
+<a name="Type.resolve"></a>
+
+### Type.resolve(value) ⇒ <code>string</code>
+<p>Resolves the type name that defines the input.</p>
+
+**Kind**: static method of [<code>Type</code>](#Type)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>\*</code> | <p>The value to get the type name from</p> |
+
 <a name="Util"></a>
 
 ## Util
@@ -1589,11 +1637,16 @@ The sort is not necessarily stable. The default sort order is according to strin
     * [new Util()](#new_Util_new)
     * [.isObject(inp)](#Util.isObject) ⇒ <code>boolean</code>
     * [.isPrimitive(inp)](#Util.isPrimitive) ⇒ <code>boolean</code>
+    * [.toTitleCase(str)](#Util.toTitleCase) ⇒ <code>string</code>
+    * [.mergeObjects(objTarget, objSource)](#Util.mergeObjects) ⇒ <code>\*</code>
+    * [.makeObject(path, value, [obj])](#Util.makeObject) ⇒ <code>\*</code>
     * [.deepClone(source)](#Util.deepClone) ⇒ <code>\*</code>
     * [.mergeDefault(def, given)](#Util.mergeDefault) ⇒ <code>Object</code>
     * [.isClass(inp)](#Util.isClass) ⇒ <code>boolean</code>
     * [.isThenable(input)](#Util.isThenable) ⇒ <code>boolean</code>
     * [.isFunction(input)](#Util.isFunction) ⇒ <code>boolean</code>
+    * [.objectToTuples(obj, [prefix])](#Util.objectToTuples) ⇒ <code>Array.&lt;Array.&lt;\*&gt;&gt;</code>
+    * [.arrayStrictEquals(arr1, arr2)](#Util.arrayStrictEquals) ⇒ <code>boolean</code>
 
 <a name="new_Util_new"></a>
 
@@ -1625,6 +1678,42 @@ The sort is not necessarily stable. The default sort order is according to strin
 | Param | Type | Description |
 | --- | --- | --- |
 | inp | <code>\*</code> | <p>Input to check</p> |
+
+<a name="Util.toTitleCase"></a>
+
+### Util.toTitleCase(str) ⇒ <code>string</code>
+<p>Converts a string to Title Case.</p>
+
+**Kind**: static method of [<code>Util</code>](#Util)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| str | <code>string</code> | <p>The string to convert to title case</p> |
+
+<a name="Util.mergeObjects"></a>
+
+### Util.mergeObjects(objTarget, objSource) ⇒ <code>\*</code>
+<p>Merges two objects.</p>
+
+**Kind**: static method of [<code>Util</code>](#Util)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| objTarget | <code>\*</code> | <p>The object to be merged</p> |
+| objSource | <code>\*</code> | <p>The object to merge</p> |
+
+<a name="Util.makeObject"></a>
+
+### Util.makeObject(path, value, [obj]) ⇒ <code>\*</code>
+<p>Turns a dotted path into a json object.</p>
+
+**Kind**: static method of [<code>Util</code>](#Util)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| path | <code>string</code> |  | <p>The dotted path</p> |
+| value | <code>\*</code> |  | <p>The value</p> |
+| [obj] | <code>Object.&lt;string, \*&gt;</code> | <code>{}</code> | <p>The object to edit</p> |
 
 <a name="Util.deepClone"></a>
 
@@ -1681,6 +1770,30 @@ The sort is not necessarily stable. The default sort order is according to strin
 | Param | Type | Description |
 | --- | --- | --- |
 | input | <code>function</code> | <p>The input to check</p> |
+
+<a name="Util.objectToTuples"></a>
+
+### Util.objectToTuples(obj, [prefix]) ⇒ <code>Array.&lt;Array.&lt;\*&gt;&gt;</code>
+<p>Convert an object to a tuple.</p>
+
+**Kind**: static method of [<code>Util</code>](#Util)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| obj | <code>Object.&lt;string, \*&gt;</code> |  | <p>The object to convert</p> |
+| [prefix] | <code>string</code> | <code>&quot;&#x27;&#x27;&quot;</code> | <p>The prefix for the key</p> |
+
+<a name="Util.arrayStrictEquals"></a>
+
+### Util.arrayStrictEquals(arr1, arr2) ⇒ <code>boolean</code>
+<p>Compares if both arrays are strictly equal.</p>
+
+**Kind**: static method of [<code>Util</code>](#Util)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| arr1 | <code>Array.&lt;any&gt;</code> | <p>The first array to compare</p> |
+| arr2 | <code>Array.&lt;any&gt;</code> | <p>The second array to compare</p> |
 
 <a name="_Symbol$species"></a>
 
