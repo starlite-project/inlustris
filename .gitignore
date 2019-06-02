@@ -72,3 +72,7 @@ config.json
 
 # IDE files
 .vscode/
+
+# explicit ignores
+!Type.*
+!src/lib/settings/*.ts
