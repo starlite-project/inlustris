@@ -75,4 +75,4 @@ config.json
 
 # explicit ignores
 !Type.*
-!src/lib/settings/*.ts
+!src/lib/storage
