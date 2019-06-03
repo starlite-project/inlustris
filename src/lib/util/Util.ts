@@ -219,27 +219,4 @@ export class Util {
         }
         return true;
     }
-
-    /**
-     * Resolves a guild.
-     * @param {InlustrisClient} client The client
-     * @param {GuildResolvable} guild A guild resolvable
-     * @returns {?Guild}
-     * @private
-     */
-    public static resolveGuild(client: InlustrisClient, guild: GuildResolvable): Guild | null {
-        const type = typeof guild;
-        if (type === 'object' && guild !== null) {
-            if (guild instanceof Guild) return guild;
-            // @ts-ignore
-            if ((guild instanceof GuildChannel) ||
-                // @ts-ignore
-                (guild instanceof GuildMember) ||
-                // @ts-ignore
-                (guild instanceof Message)) return guild.guild;
-        } else if (type === 'string' && /^\d{17,19}$/.test(guild as string)) {
-            return client.guilds.get(guild as string) || null;
-        }
-        return null;
-    }
 }

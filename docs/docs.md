@@ -9,8 +9,6 @@
 <dd><p>The registry for holding and loading commands.</p></dd>
 <dt><a href="#EventRegistry">EventRegistry</a> ⇐ <code><a href="#BaseRegistry">BaseRegistry</a></code></dt>
 <dd><p>The event registry for loading events</p></dd>
-<dt><a href="#SettingsFolder">SettingsFolder</a> ⇐ <code>Map</code></dt>
-<dd><p>The SettingsFolder class that manages the data for an entry from the database.</p></dd>
 <dt><a href="#Base">Base</a></dt>
 <dd><p>The base class for all pieces.</p></dd>
 <dt><a href="#Command">Command</a> ⇐ <code><a href="#Base">Base</a></code></dt>
@@ -604,13 +602,6 @@ is ready.</p>
 
 **Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
 **Overrides**: [<code>loadAll</code>](#BaseRegistry+loadAll)  
-<a name="SettingsFolder"></a>
-
-## SettingsFolder ⇐ <code>Map</code>
-<p>The SettingsFolder class that manages the data for an entry from the database.</p>
-
-**Kind**: global class  
-**Extends**: <code>Map</code>  
 <a name="Base"></a>
 
 ## *Base*
