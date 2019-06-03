@@ -13,7 +13,7 @@
         "lint": "npx eslint src --ext .ts",
         "clean": "rimraf dist/ .cache/",
         "test": "node ./test/test.js",
-        "docs": "jsdoc2md --no-cache --files ./src/**/*.ts --configure ./jsdoc2md.json > ./docs/docs.md"
+        "docs": "jsdoc2md --no-cache --files ./src/**/*.ts --configure ./jsdoc2md.json > ./docs/docs.md && jsdoc2md --no-cache --files ./src/**/*.ts --configure ./jsdoc2md.json --json > ./docs/docs.json"
     },
     "dependencies": {
         "discord.js": "discordjs/discord.js",
