@@ -697,6 +697,7 @@ is ready.</p>
 **Extends**: [<code>Base</code>](#Base)  
 
 * [Command](#Command) ⇐ [<code>Base</code>](#Base)
+    * [.separator](#Command+separator) : <code>string</code>
     * [.client](#Base+client) : [<code>InlustrisClient</code>](#InlustrisClient)
     * [.options](#Base+options) : [<code>BaseOptions</code>](#BaseOptions)
     * [.registry](#Base+registry) : <code>BaseStore</code>
@@ -707,6 +708,12 @@ is ready.</p>
     * [.disable()](#Base+disable) ⇒ [<code>Base</code>](#Base)
     * [.unload()](#Base+unload) ⇒ <code>void</code>
 
+<a name="Command+separator"></a>
+
+### command.separator : <code>string</code>
+<p>The separator for argument generators</p>
+
+**Kind**: instance property of [<code>Command</code>](#Command)  
 <a name="Base+client"></a>
 
 ### command.client : [<code>InlustrisClient</code>](#InlustrisClient)
