@@ -5,5 +5,5 @@ const { Client } = require('../');
 new Client({
     token: require('./config.json').token
 })
-    .use('settings')
+    .use('internals')
     .start();

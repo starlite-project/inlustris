@@ -6,4 +6,7 @@ export interface InlustrisOptions extends ClientOptions {
     token?: string;
     owners?: string[];
     createPiecesFolders?: boolean;
+    schedule?: {
+        interval?: number;
+    };
 }

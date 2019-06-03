@@ -10,6 +10,7 @@ const { isClass } = Util;
 /**
  * The base registry for all stores to extend.
  * @abstract
+ * @extends {Collection}
  */
 export abstract class BaseRegistry<V extends Base, VConstructor = typeof Base> extends Collection<string, V> {
     public readonly holds: VConstructor;
@@ -143,7 +144,6 @@ export abstract class BaseRegistry<V extends Base, VConstructor = typeof Base> e
         return Promise.all([...files.keys()].map((file): V | null => registry.load(directory, relative(directory, file).split(sep))));
     }
     
-    /** @private */
     public static get [Symbol.species](): typeof Collection {
         return Collection;
     }

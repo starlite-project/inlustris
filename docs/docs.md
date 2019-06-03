@@ -9,14 +9,24 @@
 <dd><p>The registry for holding and loading commands.</p></dd>
 <dt><a href="#EventRegistry">EventRegistry</a> ⇐ <code><a href="#BaseRegistry">BaseRegistry</a></code></dt>
 <dd><p>The event registry for loading events</p></dd>
+<dt><a href="#TaskRegistry">TaskRegistry</a> ⇐ <code><a href="#BaseRegistry">BaseRegistry</a></code></dt>
+<dd><p>The registry where tasks are loaded and stored.</p></dd>
+<dt><a href="#Schedule">Schedule</a></dt>
+<dd><p>The schedule for the schedule plugin.</p></dd>
+<dt><a href="#ScheduledTask">ScheduledTask</a></dt>
+<dd><p>A scheduled task, used for creating tasks.</p></dd>
 <dt><a href="#Base">Base</a></dt>
 <dd><p>The base class for all pieces.</p></dd>
 <dt><a href="#Command">Command</a> ⇐ <code><a href="#Base">Base</a></code></dt>
 <dd><p>Command class for creating commands.</p></dd>
 <dt><a href="#Event">Event</a> ⇐ <code><a href="#Base">Base</a></code></dt>
 <dd><p>The event class for creating events.</p></dd>
+<dt><a href="#Task">Task</a> ⇐ <code><a href="#Base">Base</a></code></dt>
+<dd><p>The task class, used for creating tasks.</p></dd>
 <dt><a href="#ClientUtil">ClientUtil</a></dt>
 <dd><p>Utility methods to use for common tasks.</p></dd>
+<dt><a href="#Cron">Cron</a></dt>
+<dd><p>Cron utility class, used for creating tasks.</p></dd>
 <dt><a href="#InlustrisError">InlustrisError</a> ⇐ <code>Error</code></dt>
 <dd><p>An error class used to make error throwing universal.</p></dd>
 <dt><a href="#List">List</a> ⇐ <code>Set</code></dt>
@@ -30,7 +40,7 @@
 ## Members
 
 <dl>
-<dt><a href="#_Symbol$species">_Symbol$species</a></dt>
+<dt><a href="#_Symbol$species">_Symbol$species</a> ⇐ <code>Collection</code></dt>
 <dd><p>The base registry for all stores to extend.</p></dd>
 </dl>
 
@@ -48,6 +58,8 @@ will load all of them.</p>
 <li><code>util</code> adds client utility methods.</li>
 <li><code>settings</code> adds settings to the client (WIP).</li>
 </ul></dd>
+<dt><a href="#TimeResolvable">TimeResolvable</a> : <code>Date</code> | <code>number</code> | <code><a href="#Cron">Cron</a></code> | <code>string</code></dt>
+<dd><p>Something that is able to be resolved to a time, used for tasks</p></dd>
 <dt><a href="#BaseOptions">BaseOptions</a> : <code>Object</code></dt>
 <dd><p>The base options for a module</p></dd>
 </dl>
@@ -66,6 +78,9 @@ will load all of them.</p>
     * [.application](#InlustrisClient+application) : [<code>ClientApplication</code>](https://discord.js.org/#/docs/main/master/class/ClientApplication)
     * [.events](#InlustrisClient+events) : [<code>EventRegistry</code>](#EventRegistry)
     * [.loaded](#InlustrisClient+loaded) : <code>boolean</code>
+    * [.tasks](#InlustrisClient+tasks) : [<code>TaskRegistry</code>](#TaskRegistry)
+    * [.schedule](#InlustrisClient+schedule) : [<code>Schedule</code>](#Schedule)
+    * [.ready](#InlustrisClient+ready) : <code>boolean</code>
     * [.owners](#InlustrisClient+owners) : [<code>List.&lt;User&gt;</code>](https://discord.js.org/#/docs/main/master/class/User)
     * [.plugins](#InlustrisClient+plugins) : <code>List.&lt;string&gt;</code>
     * [.text](#InlustrisClient+text) : <code>Collection.&lt;string, TextChannel&gt;</code>
@@ -81,6 +96,7 @@ will load all of them.</p>
     * [.load()](#InlustrisClient+load) ⇒ <code>Promise.&lt;List.&lt;string&gt;&gt;</code>
     * [.use(mod)](#InlustrisClient+use) ⇒ [<code>InlustrisClient</code>](#InlustrisClient)
     * [.isOwner(user)](#InlustrisClient+isOwner) ⇒ <code>boolean</code>
+    * [.@@iterator()](#InlustrisClient+@@iterator) ⇒ <code>Iterator.&lt;string&gt;</code>
     * ["baseEnabled" (base)](#InlustrisClient+event_baseEnabled)
     * ["baseDisabled" (base)](#InlustrisClient+event_baseDisabled)
     * ["clientReady"](#InlustrisClient+event_clientReady)
@@ -119,6 +135,24 @@ will load all of them.</p>
 
 ### inlustrisClient.loaded : <code>boolean</code>
 <p>Whether the client has loaded all available plugins</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+<a name="InlustrisClient+tasks"></a>
+
+### inlustrisClient.tasks : [<code>TaskRegistry</code>](#TaskRegistry)
+<p>The registry where tasks are stored, only applied if <code>schedule</code>, <code>tasks</code>, <code>internals</code>, or <code>defaults</code> is a loaded plugin</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+<a name="InlustrisClient+schedule"></a>
+
+### inlustrisClient.schedule : [<code>Schedule</code>](#Schedule)
+<p>The schedule for the tasks, only applied if <code>schedule</code>, <code>tasks</code>, <code>internals</code>, or <code>defaults</code> is a loaded plugin</p>
+
+**Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
+<a name="InlustrisClient+ready"></a>
+
+### inlustrisClient.ready : <code>boolean</code>
+<p>Whether the client is ready. Used internally for several things</p>
 
 **Kind**: instance property of [<code>InlustrisClient</code>](#InlustrisClient)  
 <a name="InlustrisClient+owners"></a>
@@ -236,6 +270,12 @@ will load all of them.</p>
 | --- | --- | --- |
 | user | [<code>UserResolvable</code>](https://discord.js.org/#/docs/main/master/typedef/UserResolvable) | <p>The user to check</p> |
 
+<a name="InlustrisClient+@@iterator"></a>
+
+### inlustrisClient.@@iterator() ⇒ <code>Iterator.&lt;string&gt;</code>
+<p>An iterator containing the list of plugins.</p>
+
+**Kind**: instance method of [<code>InlustrisClient</code>](#InlustrisClient)  
 <a name="InlustrisClient+event_baseEnabled"></a>
 
 ### "baseEnabled" (base)
@@ -602,6 +642,293 @@ is ready.</p>
 
 **Kind**: instance method of [<code>EventRegistry</code>](#EventRegistry)  
 **Overrides**: [<code>loadAll</code>](#BaseRegistry+loadAll)  
+<a name="TaskRegistry"></a>
+
+## TaskRegistry ⇐ [<code>BaseRegistry</code>](#BaseRegistry)
+<p>The registry where tasks are loaded and stored.</p>
+
+**Kind**: global class  
+**Extends**: [<code>BaseRegistry</code>](#BaseRegistry)  
+
+* [TaskRegistry](#TaskRegistry) ⇐ [<code>BaseRegistry</code>](#BaseRegistry)
+    * [.holds](#BaseRegistry+holds) : [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.name](#BaseRegistry+name) : <code>string</code>
+    * [.userDirectory](#BaseRegistry+userDirectory) : <code>string</code>
+    * [.registerCoreDirectory(directory)](#BaseRegistry+registerCoreDirectory) ⇒ <code>this</code>
+    * [.loadAll()](#BaseRegistry+loadAll) ⇒ <code>Promise.&lt;number&gt;</code>
+    * [.load(directory, file)](#BaseRegistry+load) ⇒ [<code>Base</code>](#Base)
+    * [.add(base)](#BaseRegistry+add) ⇒ [<code>Base</code>](#Base)
+
+<a name="BaseRegistry+holds"></a>
+
+### taskRegistry.holds : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client that this Registry is for</p>
+
+**Kind**: instance property of [<code>TaskRegistry</code>](#TaskRegistry)  
+**Overrides**: [<code>holds</code>](#BaseRegistry+holds)  
+**Read only**: true  
+<a name="BaseRegistry+name"></a>
+
+### taskRegistry.name : <code>string</code>
+<p>The name of the Registry</p>
+
+**Kind**: instance property of [<code>TaskRegistry</code>](#TaskRegistry)  
+**Overrides**: [<code>name</code>](#BaseRegistry+name)  
+**Read only**: true  
+<a name="BaseRegistry+userDirectory"></a>
+
+### taskRegistry.userDirectory : <code>string</code>
+<p>The directory where the bases are found</p>
+
+**Kind**: instance property of [<code>TaskRegistry</code>](#TaskRegistry)  
+**Overrides**: [<code>userDirectory</code>](#BaseRegistry+userDirectory)  
+<a name="BaseRegistry+registerCoreDirectory"></a>
+
+### taskRegistry.registerCoreDirectory(directory) ⇒ <code>this</code>
+<p>Registers a core directory.</p>
+
+**Kind**: instance method of [<code>TaskRegistry</code>](#TaskRegistry)  
+**Overrides**: [<code>registerCoreDirectory</code>](#BaseRegistry+registerCoreDirectory)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| directory | <code>string</code> | <p>The directory to register</p> |
+
+<a name="BaseRegistry+loadAll"></a>
+
+### taskRegistry.loadAll() ⇒ <code>Promise.&lt;number&gt;</code>
+<p>Loads all the bases found in the core directories.</p>
+
+**Kind**: instance method of [<code>TaskRegistry</code>](#TaskRegistry)  
+**Overrides**: [<code>loadAll</code>](#BaseRegistry+loadAll)  
+<a name="BaseRegistry+load"></a>
+
+### taskRegistry.load(directory, file) ⇒ [<code>Base</code>](#Base)
+<p>Loads a base into the registry.</p>
+
+**Kind**: instance method of [<code>TaskRegistry</code>](#TaskRegistry)  
+**Overrides**: [<code>load</code>](#BaseRegistry+load)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| directory | <code>string</code> | <p>The directory of the base</p> |
+| file | <code>Array.&lt;string&gt;</code> | <p>The file location of the base</p> |
+
+<a name="BaseRegistry+add"></a>
+
+### taskRegistry.add(base) ⇒ [<code>Base</code>](#Base)
+<p>Adds a base to the registry.</p>
+
+**Kind**: instance method of [<code>TaskRegistry</code>](#TaskRegistry)  
+**Overrides**: [<code>add</code>](#BaseRegistry+add)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| base | [<code>Base</code>](#Base) | <p>The base to be added</p> |
+
+<a name="Schedule"></a>
+
+## Schedule
+<p>The schedule for the schedule plugin.</p>
+
+**Kind**: global class  
+
+* [Schedule](#Schedule)
+    * [.client](#Schedule+client) : [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.tasks](#Schedule+tasks) : [<code>Array.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+    * [.init()](#Schedule+init) ⇒ <code>Promise.&lt;void&gt;</code>
+    * [.create(taskName, time, [options])](#Schedule+create) ⇒ [<code>Promise.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+    * [.clear()](#Schedule+clear) ⇒ <code>void</code>
+    * [.get(id)](#Schedule+get) ⇒ [<code>ScheduledTask</code>](#ScheduledTask)
+    * [.next()](#Schedule+next) ⇒ [<code>ScheduledTask</code>](#ScheduledTask)
+    * [.delete(id)](#Schedule+delete) ⇒ [<code>Promise.&lt;Schedule&gt;</code>](#Schedule)
+    * [._insert(task)](#Schedule+_insert) ⇒ [<code>ScheduledTask</code>](#ScheduledTask)
+    * [.execute()](#Schedule+execute) ⇒ <code>Promise.&lt;void&gt;</code>
+    * [.@@iterator()](#Schedule+@@iterator) ⇒ [<code>Iterator.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+
+<a name="Schedule+client"></a>
+
+### schedule.client : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client</p>
+
+**Kind**: instance property of [<code>Schedule</code>](#Schedule)  
+<a name="Schedule+tasks"></a>
+
+### schedule.tasks : [<code>Array.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+<p>The tasks that have been set</p>
+
+**Kind**: instance property of [<code>Schedule</code>](#Schedule)  
+<a name="Schedule+init"></a>
+
+### schedule.init() ⇒ <code>Promise.&lt;void&gt;</code>
+<p>Initializes the schedule, placeholder while I work on settings.
+Called when the client is ready.</p>
+
+**Kind**: instance method of [<code>Schedule</code>](#Schedule)  
+<a name="Schedule+create"></a>
+
+### schedule.create(taskName, time, [options]) ⇒ [<code>Promise.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+<p>Creates a task and adds it to the schedule.</p>
+
+**Kind**: instance method of [<code>Schedule</code>](#Schedule)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| taskName | <code>string</code> | <p>The name of the task in the task registry</p> |
+| time | <code>string</code> \| <code>number</code> \| <code>Date</code> | <p>The time for the task</p> |
+| [options] | <code>ScheduledTaskOptions</code> | <p>The options for the task</p> |
+
+<a name="Schedule+clear"></a>
+
+### schedule.clear() ⇒ <code>void</code>
+<p>Clears the tasks.</p>
+
+**Kind**: instance method of [<code>Schedule</code>](#Schedule)  
+<a name="Schedule+get"></a>
+
+### schedule.get(id) ⇒ [<code>ScheduledTask</code>](#ScheduledTask)
+<p>Gets a task by ID.</p>
+
+**Kind**: instance method of [<code>Schedule</code>](#Schedule)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | <p>The ID of the task</p> |
+
+<a name="Schedule+next"></a>
+
+### schedule.next() ⇒ [<code>ScheduledTask</code>](#ScheduledTask)
+<p>The next task in the schedule.</p>
+
+**Kind**: instance method of [<code>Schedule</code>](#Schedule)  
+<a name="Schedule+delete"></a>
+
+### schedule.delete(id) ⇒ [<code>Promise.&lt;Schedule&gt;</code>](#Schedule)
+<p>Deletes a task from the schedule.</p>
+
+**Kind**: instance method of [<code>Schedule</code>](#Schedule)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | <p>The ID of the task</p> |
+
+<a name="Schedule+_insert"></a>
+
+### schedule.\_insert(task) ⇒ [<code>ScheduledTask</code>](#ScheduledTask)
+<p>Inserts a task into the schedule.</p>
+
+**Kind**: instance method of [<code>Schedule</code>](#Schedule)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| task | [<code>ScheduledTask</code>](#ScheduledTask) | <p>The task to insert</p> |
+
+<a name="Schedule+execute"></a>
+
+### schedule.execute() ⇒ <code>Promise.&lt;void&gt;</code>
+<p>Executes tasks that need to be executed.</p>
+
+**Kind**: instance method of [<code>Schedule</code>](#Schedule)  
+<a name="Schedule+@@iterator"></a>
+
+### schedule.@@iterator() ⇒ [<code>Iterator.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+<p>An iterator yielding all the tasks.</p>
+
+**Kind**: instance method of [<code>Schedule</code>](#Schedule)  
+<a name="ScheduledTask"></a>
+
+## ScheduledTask
+<p>A scheduled task, used for creating tasks.</p>
+
+**Kind**: global class  
+
+* [ScheduledTask](#ScheduledTask)
+    * [.client](#ScheduledTask+client) : [<code>InlustrisClient</code>](#InlustrisClient)
+    * [.taskName](#ScheduledTask+taskName) : <code>string</code>
+    * [.recurring](#ScheduledTask+recurring) : [<code>Cron</code>](#Cron)
+    * [.time](#ScheduledTask+time) : <code>Date</code>
+    * [.id](#ScheduledTask+id) : <code>string</code>
+    * [.data](#ScheduledTask+data) : <code>any</code>
+    * [.task](#ScheduledTask+task) : [<code>Task</code>](#Task)
+    * [.registry](#ScheduledTask+registry) : [<code>Schedule</code>](#Schedule)
+    * [.run()](#ScheduledTask+run) ⇒ [<code>Promise.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+    * [.update([options])](#ScheduledTask+update) ⇒ [<code>Promise.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+    * [.delete()](#ScheduledTask+delete) ⇒ [<code>Promise.&lt;Schedule&gt;</code>](#Schedule)
+
+<a name="ScheduledTask+client"></a>
+
+### scheduledTask.client : [<code>InlustrisClient</code>](#InlustrisClient)
+<p>The client</p>
+
+**Kind**: instance property of [<code>ScheduledTask</code>](#ScheduledTask)  
+**Read only**: true  
+<a name="ScheduledTask+taskName"></a>
+
+### scheduledTask.taskName : <code>string</code>
+<p>The name of the task</p>
+
+**Kind**: instance property of [<code>ScheduledTask</code>](#ScheduledTask)  
+<a name="ScheduledTask+recurring"></a>
+
+### scheduledTask.recurring : [<code>Cron</code>](#Cron)
+<p>When the task should recur</p>
+
+**Kind**: instance property of [<code>ScheduledTask</code>](#ScheduledTask)  
+<a name="ScheduledTask+time"></a>
+
+### scheduledTask.time : <code>Date</code>
+<p>The time that this task should run</p>
+
+**Kind**: instance property of [<code>ScheduledTask</code>](#ScheduledTask)  
+<a name="ScheduledTask+id"></a>
+
+### scheduledTask.id : <code>string</code>
+<p>The unique ID of the task</p>
+
+**Kind**: instance property of [<code>ScheduledTask</code>](#ScheduledTask)  
+<a name="ScheduledTask+data"></a>
+
+### scheduledTask.data : <code>any</code>
+<p>The data to pass to the task when ran</p>
+
+**Kind**: instance property of [<code>ScheduledTask</code>](#ScheduledTask)  
+<a name="ScheduledTask+task"></a>
+
+### scheduledTask.task : [<code>Task</code>](#Task)
+<p>The task that this is for</p>
+
+**Kind**: instance property of [<code>ScheduledTask</code>](#ScheduledTask)  
+**Read only**: true  
+<a name="ScheduledTask+registry"></a>
+
+### scheduledTask.registry : [<code>Schedule</code>](#Schedule)
+<p>The schedule for the task</p>
+
+**Kind**: instance property of [<code>ScheduledTask</code>](#ScheduledTask)  
+**Read only**: true  
+<a name="ScheduledTask+run"></a>
+
+### scheduledTask.run() ⇒ [<code>Promise.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+<p>Runs the task, passing data to the appropriate task</p>
+
+**Kind**: instance method of [<code>ScheduledTask</code>](#ScheduledTask)  
+<a name="ScheduledTask+update"></a>
+
+### scheduledTask.update([options]) ⇒ [<code>Promise.&lt;ScheduledTask&gt;</code>](#ScheduledTask)
+<p>Updates a task, called if a task is recurring.</p>
+
+**Kind**: instance method of [<code>ScheduledTask</code>](#ScheduledTask)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>ScheduledTaskUpdateOptions</code> | <p>The options to update the task with</p> |
+
+<a name="ScheduledTask+delete"></a>
+
+### scheduledTask.delete() ⇒ [<code>Promise.&lt;Schedule&gt;</code>](#Schedule)
+<p>Deletes the task from the schedule.</p>
+
+**Kind**: instance method of [<code>ScheduledTask</code>](#ScheduledTask)  
 <a name="Base"></a>
 
 ## *Base*
@@ -883,6 +1210,81 @@ is ready.</p>
 
 **Kind**: instance method of [<code>Event</code>](#Event)  
 **Overrides**: [<code>unload</code>](#Base+unload)  
+**Emits**: [<code>baseUnloaded</code>](#InlustrisClient+event_baseUnloaded)  
+<a name="Task"></a>
+
+## *Task ⇐ [<code>Base</code>](#Base)*
+<p>The task class, used for creating tasks.</p>
+
+**Kind**: global abstract class  
+**Extends**: [<code>Base</code>](#Base)  
+
+* *[Task](#Task) ⇐ [<code>Base</code>](#Base)*
+    * *[.client](#Base+client) : [<code>InlustrisClient</code>](#InlustrisClient)*
+    * *[.options](#Base+options) : [<code>BaseOptions</code>](#BaseOptions)*
+    * *[.registry](#Base+registry) : <code>BaseStore</code>*
+    * *[.id](#Base+id) : <code>string</code>*
+    * *[.enabled](#Base+enabled) : <code>boolean</code>*
+    * *[.enable()](#Base+enable) ⇒ [<code>Base</code>](#Base)*
+    * *[.disable()](#Base+disable) ⇒ [<code>Base</code>](#Base)*
+    * *[.unload()](#Base+unload) ⇒ <code>void</code>*
+
+<a name="Base+client"></a>
+
+### *task.client : [<code>InlustrisClient</code>](#InlustrisClient)*
+<p>The client that initialized this base</p>
+
+**Kind**: instance property of [<code>Task</code>](#Task)  
+**Read only**: true  
+<a name="Base+options"></a>
+
+### *task.options : [<code>BaseOptions</code>](#BaseOptions)*
+<p>The options for this base</p>
+
+**Kind**: instance property of [<code>Task</code>](#Task)  
+**Read only**: true  
+<a name="Base+registry"></a>
+
+### *task.registry : <code>BaseStore</code>*
+<p>The Registry that holds this base</p>
+
+**Kind**: instance property of [<code>Task</code>](#Task)  
+**Read only**: true  
+<a name="Base+id"></a>
+
+### *task.id : <code>string</code>*
+<p>The ID of this base</p>
+
+**Kind**: instance property of [<code>Task</code>](#Task)  
+**Read only**: true  
+<a name="Base+enabled"></a>
+
+### *task.enabled : <code>boolean</code>*
+<p>Whether this base is enabled</p>
+
+**Kind**: instance property of [<code>Task</code>](#Task)  
+<a name="Base+enable"></a>
+
+### *task.enable() ⇒ [<code>Base</code>](#Base)*
+<p>Enables the base. Shortcut for <code>&lt;base&gt;.enabled = true</code>.</p>
+
+**Kind**: instance method of [<code>Task</code>](#Task)  
+**Chainable**  
+**Emits**: [<code>baseEnabled</code>](#InlustrisClient+event_baseEnabled)  
+<a name="Base+disable"></a>
+
+### *task.disable() ⇒ [<code>Base</code>](#Base)*
+<p>Disables the base. Shortcut for <code>&lt;base&gt;.enabled = false</code>.</p>
+
+**Kind**: instance method of [<code>Task</code>](#Task)  
+**Chainable**  
+**Emits**: [<code>baseDisabled</code>](#InlustrisClient+event_baseDisabled)  
+<a name="Base+unload"></a>
+
+### *task.unload() ⇒ <code>void</code>*
+<p>Unloads the base, and deletes it from the registry.</p>
+
+**Kind**: instance method of [<code>Task</code>](#Task)  
 **Emits**: [<code>baseUnloaded</code>](#InlustrisClient+event_baseUnloaded)  
 <a name="ClientUtil"></a>
 
@@ -1258,6 +1660,51 @@ Returns <code>0</code>, <code>1</code>, or <code>2</code> for no change, stopped
 | Param | Type | Description |
 | --- | --- | --- |
 | [iterable] | <code>Iterable</code> | <p>Entries to fill with</p> |
+
+<a name="Cron"></a>
+
+## Cron
+<p>Cron utility class, used for creating tasks.</p>
+
+**Kind**: global class  
+
+* [Cron](#Cron)
+    * [new Cron(cron)](#new_Cron_new)
+    * [.cron](#Cron+cron) : <code>string</code>
+    * [.normalized](#Cron+normalized) : <code>string</code>
+    * [.next([outset], [origin])](#Cron+next) ⇒ <code>Date</code>
+
+<a name="new_Cron_new"></a>
+
+### new Cron(cron)
+
+| Param | Type |
+| --- | --- |
+| cron | <code>string</code> | 
+
+<a name="Cron+cron"></a>
+
+### cron.cron : <code>string</code>
+<p>The cron string that generated this</p>
+
+**Kind**: instance property of [<code>Cron</code>](#Cron)  
+<a name="Cron+normalized"></a>
+
+### cron.normalized : <code>string</code>
+<p>The normalized cron string</p>
+
+**Kind**: instance property of [<code>Cron</code>](#Cron)  
+<a name="Cron+next"></a>
+
+### cron.next([outset], [origin]) ⇒ <code>Date</code>
+<p>Gets the next instance that this will trigger.</p>
+
+**Kind**: instance method of [<code>Cron</code>](#Cron)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [outset] | <code>Date</code> | <code>new Date()</code> | <p>The previous date</p> |
+| [origin] | <code>boolean</code> | <code>true</code> | <p>Whether this is the original call</p> |
 
 <a name="InlustrisError"></a>
 
@@ -1804,10 +2251,11 @@ The sort is not necessarily stable. The default sort order is according to strin
 
 <a name="_Symbol$species"></a>
 
-## *\_Symbol$species*
+## *\_Symbol$species ⇐ <code>Collection</code>*
 <p>The base registry for all stores to extend.</p>
 
 **Kind**: global abstract variable  
+**Extends**: <code>Collection</code>  
 <a name="InlustrisPlugin"></a>
 
 ## InlustrisPlugin : <code>Object</code>
@@ -1844,6 +2292,12 @@ will load all of them.</p>
 <li><code>util</code> adds client utility methods.</li>
 <li><code>settings</code> adds settings to the client (WIP).</li>
 </ul>
+
+**Kind**: global typedef  
+<a name="TimeResolvable"></a>
+
+## TimeResolvable : <code>Date</code> \| <code>number</code> \| [<code>Cron</code>](#Cron) \| <code>string</code>
+<p>Something that is able to be resolved to a time, used for tasks</p>
 
 **Kind**: global typedef  
 <a name="BaseOptions"></a>

@@ -4,6 +4,9 @@ import { TIME, tokenRegex as tokensRegex } from './Constants';
 const { DAY, CRON } = TIME;
 const { allowedNum, partRegex, wildcardRegex, predefined, tokens } = CRON;
 
+/**
+ * Cron utility class, used for creating tasks.
+ */
 export class Cron {
     public cron: string;
 
@@ -19,13 +22,29 @@ export class Cron {
 
     public dows: number[];
 
+    /** @param {string} cron */
     public constructor(cron: string) {
+        /**
+         * The cron string that generated this
+         * @type {string}
+         */
         this.cron = cron.toLowerCase();
+        /**
+         * The normalized cron string
+         * @type {string}
+         */
         this.normalized = (this.constructor as typeof Cron)._normalize(this.cron);
+
         [this.minutes, this.hours, this.days, this.months, this.dows] = (this.constructor as typeof Cron)._parseString(this.normalized);
     }
 
-    public next(outset = new Date(), origin = true): Date {
+    /**
+     * Gets the next instance that this will trigger.
+     * @param {Date} [outset=new Date()] The previous date
+     * @param {boolean} [origin=true] Whether this is the original call
+     * @returns {Date}
+     */
+    public next(outset: Date = new Date(), origin: boolean = true): Date {
         if (!this.days.includes(outset.getUTCDate()) || !this.months.includes(outset.getUTCMonth() + 1) || !this.dows.includes(outset.getUTCDay())) {
             return this.next(new Date(outset.getTime() + DAY), false);
         }
@@ -44,6 +63,12 @@ export class Cron {
         return this.next(new Date(outset.getTime() + DAY), false);
     }
 
+    /**
+     * Normalizes a string into a cron-parsed string.
+     * @param {string} cron The cron to parse
+     * @returns {string}
+     * @private
+     */
     private static _normalize(cron: string): string {
         if (cron in predefined) return predefined[cron];
         const now = new Date();
@@ -64,12 +89,25 @@ export class Cron {
         return cron.replace(tokensRegex, (match): string => tokens[match]);
     }
 
+    /**
+     * Parses a string into numbers.
+     * @param {string} cron The cron string to parse
+     * @returns {Array<Array<number>>}
+     * @private
+     */
     private static _parseString(cron: string): number[][] {
         const parts = cron.split(' ');
         if (parts.length !== 5) throw new Error('Invalid Cron Provided');
         return parts.map(Cron._parsePart);
     }
 
+    /**
+     * Parses a part into a cron number
+     * @param {string} cronPart The cron part to parse
+     * @param {number} id The place of the part
+     * @returns {Array<number>}
+     * @private
+     */
     private static _parsePart(cronPart: string, id: number): number[] {
         if (cronPart.includes(',')) {
             const res: number[] = [];
@@ -86,6 +124,14 @@ export class Cron {
         return Cron._range(...[parseInt(min), parseInt(max) || allowedNum[id][1]].sort((a, b): number => a - b), parseInt(step) || 1);
     }
 
+    /**
+     * Creates a range for cron
+     * @param {number} min The minimum
+     * @param {number} max The maximum
+     * @param {number} step How much the range steps by
+     * @returns {Array<number>}
+     * @private
+     */
     private static _range(min: number, max: number, step: number): number[] {
         return new Array(Math.floor((max - min) / step) + 1).fill(0).map((val, i): number => min + (i * step));
     }

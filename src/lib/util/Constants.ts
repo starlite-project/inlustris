@@ -5,7 +5,10 @@ export const DefaultOptions: InlustrisOptions = {
     token: '',
     plugins: new List<string>(),
     prefix: '!',
-    owners: []
+    owners: [],
+    schedule: {
+        interval: 60000
+    }
 };
 
 export const MENTION_REGEX = {

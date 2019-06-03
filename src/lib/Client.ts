@@ -10,7 +10,8 @@ import { DefaultOptions } from './util/Constants';
 import { InlustrisError } from './util/InlustrisError';
 import { List } from './util/List';
 import { Util } from './util/Util';
-
+import { TaskRegistry } from './registries/TaskRegistry';
+import { Schedule } from './schedule/Schedule';
 
 /**
  * The base client for Inlustris.
@@ -23,6 +24,10 @@ export class InlustrisClient extends Client {
 
     public options: InlustrisOptions;
 
+    public schedule: Schedule | null;
+
+    public tasks: TaskRegistry | null;
+
     public util: ClientUtil | null;
 
     public application: ClientApplication | null;
@@ -32,6 +37,8 @@ export class InlustrisClient extends Client {
     private registries: List<BaseRegistry<Base, typeof Base>>;
 
     private _plugins: List<string>;
+
+    private _ready: boolean;
 
     private _token: string;
 
@@ -97,6 +104,37 @@ export class InlustrisClient extends Client {
          * @type {boolean}
          */
         this.loaded = false;
+
+        /**
+         * The registry where tasks are stored, only applied if `schedule`, `tasks`, `internals`, or `defaults` is a loaded plugin
+         * @type {?TaskRegistry}
+         */
+        this.tasks = null;
+
+        /**
+         * The schedule for the tasks, only applied if `schedule`, `tasks`, `internals`, or `defaults` is a loaded plugin
+         * @type {?Schedule}
+         */
+        this.schedule = null;
+
+        /**
+         * Internal ready check
+         * @type {boolean}
+         * @private
+         */
+        this._ready = false;
+    }
+
+    /**
+     * Whether the client is ready. Used internally for several things
+     * @type {boolean}
+     */
+    public get ready(): boolean {
+        return this._ready;
+    }
+
+    public set ready(val: boolean) {
+        this.ready = val;
     }
 
     /**
@@ -225,7 +263,7 @@ export class InlustrisClient extends Client {
      */
     public async load(): Promise<List<string>> {
         const plugs = new List<string>();
-        for (const plugin of this.plugins) {
+        for (const plugin of this) {
             plugs.add(plugin);
             const resolved = this._resolvePlugin(plugin);
             if (typeof resolved === 'string') continue;
@@ -247,9 +285,16 @@ export class InlustrisClient extends Client {
                 this.util = new ClientUtil(this);
                 return plugin;
             }
+            case 'schedule': {
+                this.tasks = new TaskRegistry(this);
+                this.schedule = new Schedule(this);
+                this.registries.add(this.tasks);
+                return plugin;
+            }
             case 'internals':
             case 'defaults': {
                 this._resolvePlugin('util');
+                this._resolvePlugin('schedule');
                 return plugin;
             }
             default: {
@@ -297,6 +342,19 @@ export class InlustrisClient extends Client {
             if (owner.id === id) return true;
         }
         return false;
+    }
+
+    /**
+     * An iterator containing the list of plugins.
+     * @name @@iterator
+     * @generator
+     * @method
+     * @instance
+     * @returns {Iterator<string>}
+     * @memberof InlustrisClient
+     */
+    public *[Symbol.iterator](): IterableIterator<string> {
+        yield* this.plugins;
     }
 }
 

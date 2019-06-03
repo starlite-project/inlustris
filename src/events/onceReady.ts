@@ -20,8 +20,9 @@ export default class extends Event {
             await Util.sleep(5000);
             return this.run();
         }
-
+        if (this.client.schedule) await this.client.schedule.init();
         if (!this.client.options.owners!.length) this.client.options.owners!.push(this.client.application!.owner!.id);
+        this.client.ready = true;
         this.client.emit('clientReady');
     }
 }
