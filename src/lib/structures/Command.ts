@@ -12,14 +12,22 @@ export abstract class Command extends Base {
 
     public aliases: string[];
 
+    public separator: string;
+
     public constructor(client: InlustrisClient, registry, options: CommandOptions) {
         super(client, registry, options);
-        
+
         /**
          * The aliases of the command
          * @type {string[]}
          */
         this.aliases = options.aliases || [];
+
+        /**
+         * The separator for argument generators
+         * @type {string}
+         */
+        this.separator = options.separator || '';
 
         if (typeof this.args !== 'function') throw new TypeError(`The args method has been incorrectly overwritten, it must be a generator function. (got type ${typeof this.args})`);
     }
