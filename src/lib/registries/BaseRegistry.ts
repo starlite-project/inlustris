@@ -144,6 +144,12 @@ export abstract class BaseRegistry<V extends Base, VConstructor = typeof Base> e
         return Promise.all([...files.keys()].map((file): V | null => registry.load(directory, relative(directory, file).split(sep))));
     }
     
+    /**
+     * The method used for creating copies.
+     * @name @@species
+     * @static
+     * @type {Collection}
+     */
     public static get [Symbol.species](): typeof Collection {
         return Collection;
     }

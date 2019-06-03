@@ -2313,3 +2313,9 @@ will load all of them.</p>
 | id | <code>string</code> | <p>The ID of the module</p> |
 | enabled | <code>boolean</code> | <p>Whether the module should be enabled on startup</p> |
 
+<a name="@@species"></a>
+
+## .@@species : <code>Collection</code>
+<p>The method used for creating copies.</p>
+
+**Kind**: static member  
