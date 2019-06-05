@@ -4,14 +4,14 @@ import { InlustrisOptions } from './interfaces/InlustrisOptions';
 import { InlustrisPlugin } from './interfaces/InlustrisPlugin';
 import { BaseRegistry } from './registries/BaseRegistry';
 import { EventRegistry } from './registries/EventRegistry';
+import { TaskRegistry } from './registries/TaskRegistry';
+import { Schedule } from './schedule/Schedule';
 import { Base } from './structures/Base';
 import { ClientUtil } from './util/ClientUtil';
 import { DefaultOptions } from './util/Constants';
 import { InlustrisError } from './util/InlustrisError';
 import { List } from './util/List';
 import { Util } from './util/Util';
-import { TaskRegistry } from './registries/TaskRegistry';
-import { Schedule } from './schedule/Schedule';
 
 /**
  * The base client for Inlustris.
