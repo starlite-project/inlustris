@@ -219,4 +219,8 @@ export class Util {
         }
         return true;
     }
+
+    public static calcShards(shards: number, guildsPerShard: number): number {
+        return Math.ceil(shards * (1000 / guildsPerShard));
+    }
 }
