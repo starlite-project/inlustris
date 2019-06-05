@@ -1,8 +1,8 @@
-import { ClusterIPC } from './ClusterIPC';
+import { Channel, Guild, ShardClientUtil as DiscordShardUtil, User, Util } from 'discord.js';
 import { SendOptions } from 'veza';
-import { Util, ShardClientUtil as DiscordShardUtil, Guild, User } from 'discord.js';
 import { InlustrisClient } from '../Client';
 import { IPCEvents } from '../util/Constants';
+import { ClusterIPC } from './ClusterIPC';
 
 export interface IPCResult<D> { // eslint-disable-line
     success: boolean;
@@ -22,7 +22,7 @@ class FetchError extends Error {
     }
 }
 
-export class ShardClientUtil {
+export class ShardClientUtil implements Partial<DiscordShardUtil> {
     public readonly clusterCount: number = Number(process.env.CLUSTER_CLUSTER_COUNT);
 
     public readonly shardCount: number = Number(process.env.CLUSTER_SHARD_COUNT);
@@ -55,6 +55,22 @@ export class ShardClientUtil {
         const { success, d } = await this.send<IPCResult<User>>({ op: IPCEvents.FETCHUSER, d: id });
         if (!success) throw new FetchError('user', id);
         return d;
+    }
+
+    public async fetchChannel(id: string): Promise<Channel> {
+        const { success, d } = await this.send<IPCResult<Channel>>({ op: IPCEvents.FETCHCHANNEL, d: id });
+        if (!success) throw new FetchError('channel', id);
+        return d;
+    }
+
+    public async restartAll(): Promise<void> {
+        return this.ipc.server.send({ op: IPCEvents.RESTARTALL }, { receptive: false });
+    }
+
+    public async restart(clusterID: number): Promise<void> {
+        // @ts-ignore
+        const { success, d } = await this.ipc.server.send<IPCResult<any>>({ op: IPCEvents.RESTART, d: clusterID });
+        if (!success) throw Util.makeError(d);
     }
 
     public send<T>(data: any, options?: SendOptions): Promise<T> {
