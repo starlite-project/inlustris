@@ -18,7 +18,7 @@
     "dependencies": {
         "discord.js": "discordjs/discord.js",
         "fs-nextra": "^0.4.5",
-        "veza": "^0.5.0"
+        "veza": "^1.0.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.4.4",
